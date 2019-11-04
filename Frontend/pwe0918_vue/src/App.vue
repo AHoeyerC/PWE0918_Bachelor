@@ -9,8 +9,10 @@
 </template>
 
 <style lang="scss">
+@import '/styles/main.scss'; //imports the main stylesheet which includes all sub-styles
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: $font-primary;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
