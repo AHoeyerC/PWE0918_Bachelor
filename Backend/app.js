@@ -12,6 +12,9 @@ const { mongodbPassword } = require('./config');
 //Logging
 app.use(morgan('dev'));
 
+//Multer - makes the uploads folder publically available
+app.use('/uploads', express.static('uploads'));
+
 //BodyParser
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -40,6 +43,7 @@ mongoose.connect('mongodb+srv://pwe0918_admin:' + mongodbPassword + '@pwe0918-ba
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
+mongoose.Promise = global.Promise;
 
 //Incase none of the routes could handle the incoming request
 app.use((req, res, next) => {
