@@ -43,7 +43,8 @@ app.use('/user', userRoutes);
 //Database connection
 mongoose.connect('mongodb+srv://pwe0918_admin:' + mongodbPassword + '@pwe0918-bachelor-anp5j.mongodb.net/test?retryWrites=true&w=majority', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
 });
 mongoose.Promise = global.Promise;
 

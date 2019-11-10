@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { secretKey } = require('../../config');
 
 const User = require('../models/user');
 
@@ -42,6 +44,45 @@ router.post('/signup', (req, res, next) => {
             });
         }
     })
+});
+
+router.post('/login', (req, res, next) => {
+    User.find({ email: req.body.email }) //find returns an array, our implementation means we should only get 1 entry though
+    .exec()
+    .then(user => {
+        if (user.length < 1) { //if we got no user
+            return res.status(401).json({
+                message: 'Auth failed'
+            });
+        }
+        bcrypt.compare(req.body.password, user[0].password, (err, result) => { //plaintext pw, hashed pw, callback
+            if (err) {
+                return res.status(401).json({
+                    message: 'Auth failed'
+                });
+            }
+            if (result) {
+                const token = jwt.sign({
+                    email: user[0].email,
+                    userId: user[0]._id
+                }, secretKey, { expiresIn: '1h'} );
+                return res.status(200).json({
+                    message: 'Auth successful',
+                    token: token
+                });
+            }
+            //if neither condition were met
+            res.status(401).json({
+                message: 'Auth failed'
+            });
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
 });
 
 router.delete('/:userId', (req, res, next) => {

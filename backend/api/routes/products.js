@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
+const checkAuth = require('../middleware/check-auth');
+
+const Product = require('../models/product');
 
 //Config for how files get stored
 //The functions are executed whenever a new file is received
@@ -31,8 +34,6 @@ const upload = multer({
     },
     fileFilter: fileFilter
 });
-
-const Product = require('../models/product');
 
 router.get('/', (req, res, next) => {
     Product.find()
@@ -64,7 +65,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.post('/', upload.single('productImage'), (req, res, next) => {
+router.post('/', checkAuth, upload.single('productImage'), (req, res, next) => {
     console.log(req.file);
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
@@ -120,7 +121,7 @@ router.get('/:productId', (req, res, next) => {
     })
 });
 
-router.patch('/:productId', (req, res, next) => {
+router.patch('/:productId', checkAuth, (req, res, next) => {
     const id = req.params.productId;
     const updateOps = {};
     //The loop checks to see how many properties we want to change. 
@@ -147,7 +148,7 @@ router.patch('/:productId', (req, res, next) => {
     });
 });
 
-router.delete('/:productId', (req, res, next) => {
+router.delete('/:productId', checkAuth, (req, res, next) => {
     const id = req.params.productId;
     Product.deleteOne({_id: id})
     .exec()
