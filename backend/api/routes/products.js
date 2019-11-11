@@ -4,7 +4,7 @@ const multer = require('multer');
 const checkAuth = require('../middleware/check-auth');
 const ProductsController = require('../controllers/products');
 
-//Config for how files get stored
+//Multer config for how files get stored
 //The functions are executed whenever a new file is received
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {

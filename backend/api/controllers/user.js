@@ -5,6 +5,26 @@ const { secretKey } = require('../../config');
 
 const User = require('../models/user');
 
+exports.user_get_all = (req, res, next) => {
+    User.find()
+    .select('_id email')
+    .exec()
+    .then(users => {
+        const response = {
+            count: users.length,
+            users: users
+        };
+        console.log(response);
+        res.status(200).json(response);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    });
+};
+
 exports.user_signup = (req, res, next) => {
     User.find({email: req.body.email})
     .exec()
@@ -80,6 +100,35 @@ exports.user_login = (req, res, next) => {
         res.status(500).json({
             error: err
         });
+    });
+};
+
+exports.user_get_user = (req, res, next) => {
+    const id = req.params.userId;
+    User.findById(id)
+    .select('_id email')
+    .exec()
+    .then(user => {
+        console.log(user);
+        if (user) {
+            res.status(200).json({
+                user: user,
+                request: {
+                    type: 'GET',
+                    url: 'http://localhost:8626/user'
+                }
+            })
+        } else {
+            res.status(404).json({
+                message: 'No valid entry found for provided ID'
+            });
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
     });
 };
 
