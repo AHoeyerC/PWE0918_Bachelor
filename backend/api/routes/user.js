@@ -12,6 +12,6 @@ router.post('/signup', UserController.user_signup);
 
 router.post('/login', UserController.user_login);
 
-router.delete('/:userId', checkAuth, UserController.user_delete_user);
+router.delete('/:userId', UserController.user_delete_user); //checkAuth, 
 
 module.exports = router;
