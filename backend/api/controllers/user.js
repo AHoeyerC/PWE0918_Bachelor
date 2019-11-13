@@ -138,6 +138,31 @@ exports.user_get_user = (req, res, next) => {
     });
 };
 
+exports.user_update_user = (req, res, next) => {
+    const id = req.params.userId;
+    const updateOps = {};
+    for (const ops of req.body) {
+        updateOps[ops.propName] = ops.value;
+    }
+    User.update({_id: id}, { $set: updateOps })
+    .exec()
+    .then(result => {
+        res.status(200).json({
+            message: 'User updated',
+            request: {
+                type: 'GET',
+                url: 'http://localhost:8626/user/' + id
+            }
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    });
+};
+
 exports.user_delete_user = (req, res, next) => {
     User.deleteOne({_id: req.params.userId})
     .exec()

@@ -24,7 +24,31 @@ exports.trophy_get_trophies = (req, res, next) => {
     });
 };
 exports.trophy_get_trophy = (req, res, next) => {
-    
+    const id = req.params.trophyId;
+    Trophy.findById(id)
+    .exec()
+    .then(trophy => {
+        console.log(trophy);
+        if (trophy) {
+            res.status(200).json({
+                trophy: trophy,
+                request: {
+                    type: 'GET',
+                    url: 'http://localhost:8626/trophies'
+                }
+            });
+        } else {
+            res.status(404).json({
+                message: 'No valid entry found for provided ID'
+            });
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    });
 };
 exports.trophy_create_trophy = (req, res, next) => {
     console.log(req.files);
@@ -65,8 +89,47 @@ exports.trophy_create_trophy = (req, res, next) => {
     }
 };
 exports.trophy_update_trophy = (req, res, next) => {
-
+    const id = req.params.trophyId;
+    const updateOps = {};
+    for (const ops of req.body) {
+        updateOps[ops.propName] = ops.value;
+    }
+    Trophy.update({_id: id}, { $set: updateOps })
+    .exec()
+    .then(result => {
+        res.status(200).json({
+            message: 'Trophy updated',
+            request: {
+                type: 'GET',
+                url: 'http://localhost:8626/trophies/' + id
+            }
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    });
 };
 exports.trophy_delete_trophy = (req, res, next) => {
-
+    const id = req.params.trophyId;
+    Trophy.deleteOne({_id: id})
+    .exec()
+    .then(result => {
+        res.status(200).json({
+            message: 'Trophy deleted',
+            request: {
+                type: 'POST',
+                url: 'http://localhost:8626/trophies',
+                body: { title: 'String', description: 'String', trophyThumbnail: 'Image', trophyPreview: 'Image', trophyAnimation: 'Image' }
+            }
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    });
 };

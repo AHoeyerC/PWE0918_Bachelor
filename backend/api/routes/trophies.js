@@ -33,4 +33,10 @@ router.get('/', TrophyController.trophy_get_trophies);
 
 router.post('/', upload.array('trophyVisuals', 3), TrophyController.trophy_create_trophy);
 
+router.get('/:trophyId', TrophyController.trophy_get_trophy);
+
+router.patch('/:trophyId', TrophyController.trophy_update_trophy);
+
+router.delete('/:trophyId', TrophyController.trophy_delete_trophy);
+
 module.exports = router;
