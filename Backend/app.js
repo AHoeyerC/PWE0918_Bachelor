@@ -9,6 +9,7 @@ const orderRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/user');
 const trophyRoutes = require('./api/routes/trophies');
 const areaRoutes = require('./api/routes/areas');
+const dataAggregateRoutes = require('./api/routes/dataAggregate');
 
 const { mongodbPassword } = require('./config');
 
@@ -43,6 +44,7 @@ app.use('/orders', orderRoutes);
 app.use('/user', userRoutes);
 app.use('/trophies', trophyRoutes);
 app.use('/areas', areaRoutes);
+app.use('/dataaggregate', dataAggregateRoutes);
 
 //Database connection
 mongoose.connect('mongodb+srv://pwe0918_admin:' + mongodbPassword + '@pwe0918-bachelor-anp5j.mongodb.net/test?retryWrites=true&w=majority', {
