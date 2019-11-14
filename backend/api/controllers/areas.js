@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Area = require('../models/area');
 const User = require('../models/user');
-
+//hello
 exports.areas_get_all = (req, res, next) => {
     Area.find()
     .select('-__v')
