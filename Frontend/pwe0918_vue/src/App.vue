@@ -1,11 +1,15 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app dark>
+    <v-bottom-navigation>
+      <v-btn icon="add_circle_outline"><span>Start Område</span></v-btn>
+      <v-btn icon="emoji_flags"><span>Mine Områder</span></v-btn>
+      <v-btn icon="format_list_bulleted"><span>Highscore</span></v-btn>
+      <v-btn icon="emoji_events"><span>Trofæer</span></v-btn>
+    </v-bottom-navigation>
+    <main>
+      
+    </main>
+  </v-app>
 </template>
 
 <style lang="scss">
