@@ -1,38 +1,60 @@
 <template>
-  <v-app dark>
-    <v-bottom-navigation>
-      <v-btn icon="add_circle_outline"><span>Start Område</span></v-btn>
-      <v-btn icon="emoji_flags"><span>Mine Områder</span></v-btn>
-      <v-btn icon="format_list_bulleted"><span>Highscore</span></v-btn>
-      <v-btn icon="emoji_events"><span>Trofæer</span></v-btn>
-    </v-bottom-navigation>
-    <main>
-      
-    </main>
+  <v-app>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      <div class="d-flex align-center">
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink mr-2"
+          contain
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          transition="scale-transition"
+          width="40"
+        />
+
+        <v-img
+          alt="Vuetify Name"
+          class="shrink mt-1 hidden-sm-and-down"
+          contain
+          min-width="100"
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
+          width="100"
+        />
+      </div>
+
+      <v-spacer></v-spacer>
+
+      <v-btn
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+        text
+      >
+        <span class="mr-2">Latest Release</span>
+        <v-icon>mdi-open-in-new</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-content>
+      <Home/>
+    </v-content>
   </v-app>
 </template>
 
-<style lang="scss">
-@import '/styles/main.scss'; //imports the main stylesheet which includes all sub-styles
+<script>
+import Home from './views/Home';
 
-#app {
-  font-family: $font-primary;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+export default {
+  name: 'App',
 
-#nav {
-  padding: 30px;
+  components: {
+    Home
+  },
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+  data: () => ({
+    //
+  }),
+};
+</script>
