@@ -1,20 +1,18 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <v-content>
-          <Map/>
-        </v-content>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-content>
-          <Navigation/>
-        </v-content>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-sheet>
+  <Map/>
+
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-content>
+            <Navigation/>
+          </v-content>
+        </v-col>
+      </v-row>
+    </v-container>
+
+  </v-sheet>
 </template>
 
 <script>
