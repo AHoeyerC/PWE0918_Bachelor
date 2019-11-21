@@ -9,10 +9,23 @@
         <v-icon>mdi mdi-calendar-plus</v-icon>
         <span>Start Område</span>
       </v-btn>
-      <v-btn>
+      <v-btn @click="overlay = !overlay">
         <v-icon>mdi mdi-flag</v-icon>
         <span>Mine Områder</span>
       </v-btn>
+      <v-overlay
+          :opacity="100"
+          :absolute="absolute"
+          :value="overlay"
+        >
+          <v-btn
+            fab=""
+            color="red"
+            @click="overlay = false"
+          >
+            X
+          </v-btn>
+        </v-overlay>
       <v-btn>
         <v-icon>mdi mdi-format-list-bulleted</v-icon>
         <span>Highscore</span>
@@ -24,26 +37,6 @@
     </div>
   </div>
 </nav>
-  <!-- <v-bottom-navigation
-  :value="activeBtn"
-  >
-    <v-btn>
-      <v-icon>mdi-add_circle_outline</v-icon>
-      <span>Start Område</span>
-    </v-btn>
-    <v-btn>
-      <v-icon>mdi-emoji_flags</v-icon>
-      <span>Mine Områder</span>
-    </v-btn>
-    <v-btn>
-      <v-icon>mdi-format_list_bulleted</v-icon>
-      <span>Highscore</span>
-    </v-btn>
-    <v-btn>
-      <v-icon>mdi-emoji_events</v-icon>
-      <span>Trofæer</span>
-    </v-btn>
-  </v-bottom-navigation> -->
 </template>
 
 <script>
@@ -51,7 +44,8 @@ export default {
   name: "Navigation",
 
   data: () => ({
-        activeBtn: 1, 
+        activeBtn: 1,
+        overlay: false,
   })
 };
 </script>

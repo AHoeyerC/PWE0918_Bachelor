@@ -38,19 +38,30 @@
     </v-app-bar>
 
     <v-content>
-      <Home/>
+      <v-row>
+        <v-col>
+          <Home/>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <Registration/>
+        </v-col>
+      </v-row>
     </v-content>
   </v-app>
 </template>
 
 <script>
 import Home from './views/Home';
+import Registration from './views/Registration';
 
 export default {
   name: 'App',
 
   components: {
-    Home
+    Home,
+    Registration
   },
 
   data: () => ({
