@@ -45,7 +45,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <Registration/>
+          <!-- <Registration/> -->
         </v-col>
       </v-row>
     </v-content>
@@ -54,14 +54,14 @@
 
 <script>
 import Home from './views/Home';
-import Registration from './views/Registration';
+// import Registration from './views/Registration';
 
 export default {
   name: 'App',
 
   components: {
     Home,
-    Registration
+    // Registration
   },
 
   data: () => ({

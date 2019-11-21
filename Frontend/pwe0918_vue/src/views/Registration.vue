@@ -1,5 +1,4 @@
 <template>
-<v-row>
     <v-form
       ref="form"
       v-model="valid"
@@ -10,22 +9,6 @@
         :counter="10"
         :rules="nameRules"
         label="Name"
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="password"
-        :counter="32"
-        :rules="passwordRules"
-        label="Password"
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="password"
-        :counter="32"
-        :rules="passwordRules"
-        label="Confirm Password"
         required
       ></v-text-field>
 
@@ -75,7 +58,6 @@
         Reset Validation
       </v-btn>
     </v-form>
-  </v-row>
 </template>
 
 <script>
