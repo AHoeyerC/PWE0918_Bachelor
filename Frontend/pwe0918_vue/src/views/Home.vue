@@ -2,14 +2,14 @@
   <v-container>
     <v-row>
       <v-col>
-        <v-content>
+        <v-content margin="0">
           <Map/>
         </v-content>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-content>
+        <v-content margin="0">
           <Navigation/>
         </v-content>
       </v-col>

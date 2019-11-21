@@ -36,19 +36,9 @@
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>
+    <Home/>
 
-    <v-content>
-      <v-row>
-        <v-col>
-          <Home/>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
           <!-- <Registration/> -->
-        </v-col>
-      </v-row>
-    </v-content>
   </v-app>
 </template>
 
