@@ -10,7 +10,8 @@
     <v-row>
       <v-col>
         <v-content margin="0">
-          <Navigation/>
+          <!-- <Navigation/> -->
+          <NavWheel/>
         </v-content>
       </v-col>
     </v-row>
@@ -19,15 +20,17 @@
 
 <script>
   import Map from "../components/Map"
-  import Navigation from "../components/Navigation"
+  // import Navigation from "../components/Navigation"
+  import NavWheel from "../components/NavWheel"
   
 
   export default {
   name: 'Home',
 
   components: {
-    Navigation,
-    Map
+    // Navigation,
+    Map,
+    NavWheel
     
   },
 
