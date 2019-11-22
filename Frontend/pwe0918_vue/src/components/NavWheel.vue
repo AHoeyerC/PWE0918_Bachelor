@@ -47,7 +47,7 @@
             <li class="c-circle-menu_item">
                 <v-btn class="c-circle-menu_link">
                     <v-icon>mdi mdi-format-list-bulleted</v-icon>
-                    <span>Highscore</span>
+                    <span>Leaderboard</span>
                 </v-btn>
                 <v-overlay
                     :opacity="100"

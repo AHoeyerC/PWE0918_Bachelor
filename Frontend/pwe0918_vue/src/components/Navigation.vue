@@ -49,17 +49,17 @@
           </v-overlay>
         <v-btn @click="overlay = !overlay">
           <v-icon>mdi mdi-format-list-bulleted</v-icon>
-          <span>Highscore</span>
+          <span>Leaderboard</span>
         </v-btn>
         <v-overlay
             :opacity="100"
             :absolute= false
             :value="overlay"
         >        
-         <Highscore
-          v-if="showHighscore"
+         <Leaderboard
+          v-if="showLeaderboard"
           >
-          </Highscore>
+          </Leaderboard>
           <v-btn
             fab
             color="red"
@@ -97,7 +97,7 @@
 <script>
 import StartOmraade from "./StartOmraade"
 import MineOmraader from "./MineOmraader"
-import Highscore from "./Highscore"
+import Leaderboard from "./Leaderboard"
 import Trofae from "./Trofae"
 
 export default {
@@ -106,7 +106,7 @@ export default {
   components: {
     StartOmraade,
     MineOmraader,
-    Highscore,
+    Leaderboard,
     Trofae
   },
 
@@ -115,7 +115,7 @@ export default {
       overlay: false,
       showStartOmraade: true,
       showMineOmraader: true,
-      showHighscore: true,
+      showLeaderboard: true,
       showTrofae: true
   }),
   methods: {
@@ -125,8 +125,8 @@ export default {
     fetchOmraader () {
       this.showMineOmraader = !this.showMineOmraader;
     },
-    fetchHighscore () {
-      this.showHighscore = !this.showHighscore;
+    fetchLeaderboard () {
+      this.showLeaderboard = !this.showLeaderboard;
     },
     fetchTrofae () {
       this.showTrofae = !this.showTrofae;
