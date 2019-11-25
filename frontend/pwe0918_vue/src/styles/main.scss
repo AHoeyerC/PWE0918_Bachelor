@@ -6,6 +6,7 @@
 
 //Components - styles for the different components in the app (not views)
 @import 'styles/components/buttons.scss';
+@import 'styles/components/circleNav.scss';
 
 //Layout
 @import 'styles/layout/header.scss';
@@ -20,5 +21,7 @@
 @import 'styles/utilities/variables.scss';
 @import 'styles/utilities/mixins.scss';
 @import 'styles/utilities/functions.scss';
+@import 'styles/utilities/circleNavMath.scss';
+
 
 //Vendors - for externals (fx bootstrap, jquery etc.)
