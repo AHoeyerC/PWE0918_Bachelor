@@ -5,14 +5,14 @@
         <v-icon>mdi mdi-plus-circle</v-icon>
       </v-btn>
       <div>
-        <v-btn @click="overlay = !overlay">
+        <v-btn @click="overlayStartOmraade = !overlayStartOmraade">
           <v-icon>mdi mdi-calendar-plus</v-icon>
           <span>Start Område</span>
         </v-btn>
         <v-overlay
             :opacity="100"
             :absolute= false
-            :value="overlay"
+            :value="overlayStartOmraade"
         >        
          <StartOmraade
           v-if="showStartOmraade"
@@ -21,19 +21,19 @@
           <v-btn
             fab
             color="red"
-           @click="overlay = false"
+           @click="overlayStartOmraade = false"
           >
             X
           </v-btn>
         </v-overlay>
-        <v-btn @click="overlay = !overlay">
+        <v-btn @click="overlayMineOmraader = !overlayMineOmraader">
           <v-icon>mdi mdi-flag</v-icon>
           <span>Mine Områder</span>
         </v-btn>
         <v-overlay
             :opacity="100"
             :absolute= false
-            :value="overlay"
+            :value="overlayMineOmraader"
         >        
         <MineOmraader
           v-if="showMineOmraader"
@@ -42,19 +42,19 @@
             <v-btn
               fab
               color="red"
-              @click="overlay = false"
+              @click="overlayMineOmraader = false"
             >
               X
             </v-btn>
           </v-overlay>
-        <v-btn @click="overlay = !overlay">
+        <v-btn @click="overlayLeaderboard = !overlayLeaderboard">
           <v-icon>mdi mdi-format-list-bulleted</v-icon>
           <span>Leaderboard</span>
         </v-btn>
         <v-overlay
             :opacity="100"
             :absolute= false
-            :value="overlay"
+            :value="overlayLeaderboard"
         >        
          <Leaderboard
           v-if="showLeaderboard"
@@ -63,19 +63,19 @@
           <v-btn
             fab
             color="red"
-           @click="overlay = false"
+           @click="overlayLeaderboard = false"
           >
             X
           </v-btn>
         </v-overlay>
-        <v-btn @click="overlay = !overlay">
+        <v-btn @click="overlayTrofae = !overlayTrofae">
           <v-icon>mdi mdi-trophy</v-icon>
           <span>Trofæer</span>
         </v-btn>
         <v-overlay
             :opacity="100"
             :absolute= false
-            :value="overlay"
+            :value="overlayTrofae"
         >        
          <Trofae
           v-if="showTrofae"
@@ -84,7 +84,7 @@
           <v-btn
             fab
             color="red"
-           @click="overlay = false"
+           @click="overlayTrofae = false"
           >
             X
           </v-btn>
@@ -112,7 +112,10 @@ export default {
 
   data: () => ({
       activeBtn: 4,
-      overlay: false,
+      overlayStartOmraade: false,
+      overlayMineOmraader: false,
+      overlayLeaderboard: false,
+      overlayTrofae: false,
       showStartOmraade: true,
       showMineOmraader: true,
       showLeaderboard: true,
