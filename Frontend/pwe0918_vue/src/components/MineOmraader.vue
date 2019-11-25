@@ -1,6 +1,6 @@
 <template>
   <v-sheet
-    width= 100%
+     width="95vw" height="90vh"
   >
     <v-tabs
       grow
@@ -18,7 +18,7 @@
               v-for="i in 3"
               :key="i">
             <v-skeleton-loader
-              class="mx-auto" width="350px" type="image" boilerplate>
+              class="mx-auto" type="image" boilerplate>
               <!--Overlayet scaler efter det indhold der er i den men indholdet i den scaler efter den boks der er fra default
                   så jeg har hard fixet det med at den skeletonloader har en størrelse på 350px i width
               -->
