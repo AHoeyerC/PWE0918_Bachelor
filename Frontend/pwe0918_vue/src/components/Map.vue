@@ -6,37 +6,36 @@
           <v-row justify="center">
             <v-col cols="6">
               <v-row justify="center" align="end">
-                <v-stepper v-model="stepper" :vertical="stepperVertical" class="pb-0">
-                  <template v-if="showStepper">
-                      <v-stepper-step :complete="stepper > 1" step="1">Vælg et område</v-stepper-step>
-                      <v-stepper-content step="1">
-                        <!-- <v-card class="mb-12" color="grey lighten-1" height="50px"></v-card> -->
-                        <v-btn color="primary" @click="stepper = 2">Næste</v-btn>
-                        <v-btn text>Cancel</v-btn>
-                      </v-stepper-content>
+                <template v-if="showStepper">
+                  <v-stepper v-model="stepper" :vertical="stepperVertical" class="pb-0">
+                    <v-stepper-step :complete="stepper > 1" step="1">Vælg et område</v-stepper-step>
+                    <v-stepper-content step="1">
+                      <v-btn color="primary" @click="drawArea(); showStepper = false">Start</v-btn>
+                      <v-btn color="primary" @click="stepper = 2">Næste</v-btn>
+                      <v-btn text @click="resetArea();">Cancel</v-btn>
+                    </v-stepper-content>
 
-                      <v-stepper-step :complete="stepper > 2" step="2">Navngiv dit område</v-stepper-step>
-                      <v-stepper-content step="2">
-                        <v-card class="mb-12" color="grey lighten-1" height="50px"></v-card>
-                        <v-btn color="primary" @click="stepper = 3">Næste</v-btn>
-                        <v-btn text>Cancel</v-btn>
-                      </v-stepper-content>
-                      
-                      <v-stepper-step :complete="stepper > 3" step="3">Vælg dato og tid for gennemførelse</v-stepper-step>
-                      <v-stepper-content step="3">
-                        <v-card class="mb-12" color="grey lighten-1" height="50px"></v-card>
-                        <v-btn color="primary" @click="stepper = 1">Opret område</v-btn>
-                        <v-btn text>Cancel</v-btn>
-                      </v-stepper-content>
-                  </template>
-                </v-stepper>
+                    <v-stepper-step :complete="stepper > 2" step="2">Navngiv dit område</v-stepper-step>
+                    <v-stepper-content step="2">
+                      <v-text-field label="Navn" v-model="selectedAreaName"></v-text-field>
+                      <v-btn color="primary" @click="stepper = 3">Næste</v-btn>
+                      <v-btn text @click="resetArea();">Cancel</v-btn>
+                    </v-stepper-content>
+                    
+                    <v-stepper-step :complete="stepper > 3" step="3">Vælg dato og tid for gennemførelse</v-stepper-step>
+                    <v-stepper-content step="3">
+                      <v-card class="mb-12" color="grey lighten-1" height="50px"></v-card>
+                      <v-btn color="primary" @click="finishAndCreateArea();">Opret område</v-btn>
+                      <v-btn text @click="resetArea();">Cancel</v-btn>
+                    </v-stepper-content>
+                  </v-stepper>
+                </template>
               </v-row>
             </v-col>
           </v-row>
         </v-container>
       </div> <!--height: 50px; width: 50px; background-color: red; position: absolute; bottom: 0; -->
     </div>
-    <v-btn>Temp Start</v-btn>
     <v-btn @click="snackbar = true">End area</v-btn>
     <v-btn @click="showStepper = !showStepper">Toggle stepper</v-btn>
     <v-snackbar v-model="snackbar" :color="snackbarColor">
@@ -61,12 +60,16 @@ export default {
     zoomLevel: 13,
     baseUrl: 'http://localhost:8626/',
     hardcodedUser: null,
-    selectedAreaCoords: {
-      type: Array
-    },
+
+    selectedAreaCoords: [],
+    selectedAreaName: '',
+    selectedAreaDate: '',
+    selectedAreaTime: '',
+
     snackbar: false,
     snackbarText: 'Område oprettet! \n Tryk for at gå til mine område',
     snackbarColor: '#3FBF04',
+
     stepper: 1,
     stepperVertical: true,
     showStepper: true,
@@ -125,7 +128,8 @@ export default {
           rectangle: false,
           polyline: false,
           marker: false,
-          circlemarker: false
+          circlemarker: false,
+          polygon: false
         },
         edit: {
           featureGroup: drawnItems,
@@ -134,13 +138,13 @@ export default {
       });
 
       //Layer color
-      drawControl.setDrawingOptions({
-        polygon: {
-          shapeOptions: {
-              color: '#3FBF04'
-            }
-        }
-      });
+      // drawControl.setDrawingOptions({
+      //   polygon: {
+      //     shapeOptions: {
+      //         color: '#3FBF04'
+      //       }
+      //   }
+      // });
 
       this.map.addControl(drawControl);
 
@@ -174,6 +178,32 @@ export default {
     //     });
     // },
 
+    drawArea() {
+      let self = this;
+      var areaCoords = new L.Draw.Polygon(this.map).enable();
+      
+      this.map.on('draw:created', function(e) {
+        areaCoords = e.layer;
+        // console.log("drawArea() ", areaCoords.toGeoJSON());
+        self.selectedAreaCoords = areaCoords.toGeoJSON().geometry.coordinates;
+        console.log("selectedCoords ", self.selectedAreaCoords);
+        self.showStepper = true;
+      })
+    },
+
+    finishAndCreateArea() {
+      this.stepper = 1;
+      this.showStepper = false;
+      this.snackbar = true;
+    },
+
+    resetArea() {
+      this.stepper = 1;
+      this.showStepper = false;
+      this.selectedAreaCoords = [];
+      this.selectedAreaName = '';
+    },
+
 
     getMapCoordsOnClick() {
       this.map.on('click', function(e) {
@@ -194,7 +224,7 @@ export default {
       try {
         const res = await axios({
           method: 'get',
-          url: 'http://localhost:8626/user/5dc93efa54cec115542329a7',
+          url: this.baseUrl + 'user/5dc93efa54cec115542329a7',
           headers: {
             'Content-Type': 'application/json'
           },
