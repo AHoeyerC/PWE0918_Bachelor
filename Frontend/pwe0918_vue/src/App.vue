@@ -24,37 +24,51 @@
           width="100"
         />
       </div>
-
+<ul id="menu">
+        <a class="menu-button icon-plus" href="#menu" title="Show navigation"><span class="mdi mdi-close"></span></a>
+        <a class="menu-button icon-minus" href="#0" title="Hide navigation"><span class="mdi mdi-close"></span></a>
+        <li class="menu-item">
+        <a href="#menu">
+        <span class="mdi mdi-account"></span>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="#menu">
+        <span class="mdi mdi-account"></span>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="#menu">
+        <span class="mdi mdi-account"></span>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="#menu">
+        <span class="mdi mdi-account"></span>
+        </a>
+    </li>
+    </ul>
       <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
     </v-app-bar>
+    <router-link to="/"></router-link>
+    <router-link to="/registration"></router-link>
+    <router-link to="/login"></router-link>
 
-    <v-content>
-      <Home/>
-    </v-content>
+    <router-view></router-view>
   </v-app>
 </template>
 
-<script>
-import Home from './views/Home';
+<style lang="scss">
+@import 'styles/main.scss';
+</style>
 
+<script>
 export default {
   name: 'App',
 
-  components: {
-    Home
-  },
-
   data: () => ({
     //
-  }),
+  })
 };
 </script>
+
