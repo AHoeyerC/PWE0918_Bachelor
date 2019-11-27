@@ -1,7 +1,7 @@
 <template>
     <v-form
         ref="form"
-         v-model="valid"
+        v-model="valid"
         :lazy-validation="lazy"
     >
         <v-text-field
@@ -55,7 +55,6 @@
             v => (v && v.length >= 6) || 'Password must be more than 6 characters',
             v => (v && v.length <= 64) || 'Password must be less than 64 characters',
         ],
-        select: null,
         checkbox: false,
         lazy: false,
         }),
