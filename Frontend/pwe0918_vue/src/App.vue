@@ -24,7 +24,30 @@
           width="100"
         />
       </div>
-
+<ul id="menu">
+        <a class="menu-button icon-plus" href="#menu" title="Show navigation"><span class="mdi mdi-close"></span></a>
+        <a class="menu-button icon-minus" href="#0" title="Hide navigation"><span class="mdi mdi-close"></span></a>
+        <li class="menu-item">
+        <a href="#menu">
+        <span class="mdi mdi-account"></span>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="#menu">
+        <span class="mdi mdi-account"></span>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="#menu">
+        <span class="mdi mdi-account"></span>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="#menu">
+        <span class="mdi mdi-account"></span>
+        </a>
+    </li>
+    </ul>
       <v-spacer></v-spacer>
     </v-app-bar>
     <router-link to="/"></router-link>
@@ -35,9 +58,11 @@
   </v-app>
 </template>
 
+<style lang="scss">
+@import 'styles/main.scss';
+</style>
+
 <script>
-
-
 export default {
   name: 'App',
 
@@ -46,3 +71,4 @@ export default {
   })
 };
 </script>
+
