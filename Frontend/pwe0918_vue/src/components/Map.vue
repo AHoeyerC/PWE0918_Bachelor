@@ -1,6 +1,6 @@
 <template>
   <v-sheet>
-    <div id="map">
+    <div id="map" style="margin-top: 50px;">
       <div style="position: relative; z-index: 401;">
         <v-container fluid>
           <v-row justify="center">
