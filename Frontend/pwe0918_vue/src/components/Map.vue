@@ -126,6 +126,7 @@ export default {
     zoomLevel: 13,
     baseUrl: 'http://localhost:8626/',
     hardcodedUser: null,
+    hardcodedArea: null,
     drawControl: null,
     drawnItems: null,
 
@@ -180,6 +181,15 @@ export default {
         [51.51, -0.047]
       ]).addTo(this.map);
       // console.log(polygon);
+
+      var polygonTest = L.polygon([
+        [51.502652, -0.121536],
+        [51.479031, -0.092182],
+        [51.497095, -0.077763]
+      ]).addTo(this.map);
+      // var polygonTest = L.polygon(this.hardcodedArea.areaLocationData.coordinates).addTo(this.map);
+      console.log(polygonTest);
+      console.log(this.map);
 
       //hardcoded popupbind
       polygon.bindPopup(`This area was completed by ${this.hardcodedUser.firstName}!`);
@@ -264,40 +274,69 @@ export default {
       });
     },
 
-    getArea() {
+    getAllAreas() {
       axios({
         method: 'get',
-        url: this.baseUrl + 'areas/5de3ac1e4984104b20738220',
+        url: this.baseUrl + 'areas',
         headers: {
-            'Content-Type': 'application/json'
-          },
+          'Content-Type': 'application/json'
+        },
         withCredentials: false
       }).then((response) => {
-        console.log("Hardcoded area: ", response);
-
-        // response.data.area.areaLocationData.coordinates.forEach(coord => {
-        //   console.log(coord);
-        // });
-
-        // let coordsArray = response.data.area.areaLocationData.coordinates;
-        // console.log(coordsArray);
-
-        // var polygon = L.polygon([
-        //   [-0.121536, 51.502652],
-        //   [-0.092182, 51.479031],
-        //   [-0.077763, 51.497095]
-        // ]).addTo(this.map);
-        // console.log(polygon);
-
-        // var polyLayer = L.polygon(coordsArray);
-        // console.log(L.polygon(coordsArray), polyLayer);
-
-        // this.drawnItems.addLayer(polyLayer);
-        // console.log(this.map);
-
+        console.log("GET ALL: ", response); 
       }).catch((error) => {
-        console.log(error);
+        console.log(error); 
       });
+    },
+
+    async getArea() {
+      try {
+        const res = await axios({
+          method: 'get',
+          url: this.baseUrl + 'areas/5de3ac1e4984104b20738220',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: false
+        });
+        this.hardcodedArea = res.data.area;
+        console.log("GET request area success: ", res.data)
+      } catch (e) {
+        console.log(e);
+      }
+      // const res = await axios({
+      //   method: 'get',
+      //   url: this.baseUrl + 'areas/5de3ac1e4984104b20738220',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   withCredentials: false
+      // }).then((response) => {
+      //   console.log("Hardcoded area: ", response);
+
+      //   // response.data.area.areaLocationData.coordinates.forEach(coord => {
+      //   //   console.log(coord);
+      //   // });
+
+      //   // let coordsArray = response.data.area.areaLocationData.coordinates;
+      //   // console.log(coordsArray);
+
+      //   // var polygon = L.polygon([
+      //   //   [-0.121536, 51.502652],
+      //   //   [-0.092182, 51.479031],
+      //   //   [-0.077763, 51.497095]
+      //   // ]).addTo(this.map);
+      //   // console.log(polygon);
+
+      //   // var polyLayer = L.polygon(coordsArray);
+      //   // console.log(L.polygon(coordsArray), polyLayer);
+
+      //   // this.drawnItems.addLayer(polyLayer);
+      //   // console.log(this.map);
+
+      // }).catch((error) => {
+      //   console.log(error);
+      // });
     },
 
     postArea() {
@@ -349,10 +388,11 @@ export default {
 
   async mounted() {
     await this.getUser(); //await da mounted() ellers ville køre asynkront og dataen fra getUser() først ville komme ind efter den skulle bruges
+    await this.getArea();
     this.initMap();
     this.getMapCoordsOnClick();
     console.log("Hardcoded user: ", this.hardcodedUser);
-    this.getArea();
+    // this.getAllAreas();
   }
 };
 </script>
