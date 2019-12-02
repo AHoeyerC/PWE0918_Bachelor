@@ -3,41 +3,107 @@
     <div id="map" style="margin-top: 50px;">
       <div style="position: relative; z-index: 401;">
         <v-container fluid>
-          <v-row justify="center">
-            <v-col cols="6">
-              <v-row justify="center" align="end">
-                <template v-if="showStepper">
-                  <v-stepper v-model="stepper" :vertical="stepperVertical" class="pb-0">
+          <v-row justify="center" align="end" style="height: 700px;" v-if="showStepper">
+            <v-col sm="10" md="5">
+                <v-sheet>
+                  <v-stepper v-model="stepper" :vertical="stepperVertical" class="pb-0 mb-6">
                     <v-stepper-step :complete="stepper > 1" step="1">Vælg et område</v-stepper-step>
                     <v-stepper-content step="1">
-                      <v-btn color="primary" @click="drawArea(); showStepper = false">Start</v-btn>
-                      <v-btn color="primary" @click="stepper = 2">Næste</v-btn>
-                      <v-btn text @click="resetArea();">Cancel</v-btn>
+                      <v-btn text @click="resetArea();">Anuller</v-btn>
+                      <v-btn v-if="!selectedAreaCoords.coordinates.length" color="success" class="mr-3" @click="drawArea(); showStepper = false">Start</v-btn> 
+                      <v-btn v-else color="success" @click="stepper = 2">Næste</v-btn>
                     </v-stepper-content>
 
                     <v-stepper-step :complete="stepper > 2" step="2">Navngiv dit område</v-stepper-step>
                     <v-stepper-content step="2">
                       <v-text-field label="Navn" v-model="selectedAreaName"></v-text-field>
-                      <v-btn color="primary" @click="stepper = 3">Næste</v-btn>
-                      <v-btn text @click="resetArea();">Cancel</v-btn>
+                      <v-btn text @click="resetArea();">Anuller</v-btn>
+                      <v-btn color="success" @click="stepper = 3">Næste</v-btn>
                     </v-stepper-content>
                     
                     <v-stepper-step :complete="stepper > 3" step="3">Vælg dato og tid for gennemførelse</v-stepper-step>
                     <v-stepper-content step="3">
-                      <v-card class="mb-12" color="grey lighten-1" height="50px"></v-card>
-                      <v-btn color="primary" @click="finishAndCreateArea();">Opret område</v-btn>
-                      <v-btn text @click="resetArea();">Cancel</v-btn>
+                      <v-dialog v-model="showDatePicker" width="290px">
+                        <template v-slot:activator="{ on }" v-on="on">
+                          <v-container class="pa-0">
+                            <v-row>
+                              <v-col cols="5">
+                                <v-btn @click="showDatePicker = !showDatePicker">
+                                  <v-icon class="mdi mdi-calendar-blank"></v-icon>
+                                </v-btn>
+                              </v-col>
+                              <v-col cols="5">
+                                <v-text-field v-model="datePicker" readonly reverse class="pt-0 mt-0"></v-text-field>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </template>
+                        <v-card>
+                          <v-card-text class="pa-0">
+                            <v-date-picker v-model="datePicker"></v-date-picker>
+                          </v-card-text>
+                          <v-divider></v-divider>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="showDatePicker = false; resetDatePicker();">
+                              Anuller
+                            </v-btn>
+                            <v-btn color="success" @click="showDatePicker = false;">
+                              Gem
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+
+                      <v-dialog v-model="showTimePicker" width="290px">
+                        <template v-slot:activator="{ on }" v-on="on">
+                          <v-container class="pa-0">
+                            <v-row>
+                              <v-col cols="5">
+                                <v-btn @click="showTimePicker = !showTimePicker">
+                                  <v-icon class="mdi mdi-clock-outline"></v-icon>
+                                </v-btn>
+                              </v-col>
+                              <v-col cols="5">
+                                <v-text-field v-model="timePicker" readonly reverse class="pt-0 mt-0"></v-text-field>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </template>
+                        <v-card>
+                          <v-card-text class="pa-0">
+                            <v-time-picker v-model="timePicker" format="24hr"></v-time-picker>
+                          </v-card-text>
+                          <v-divider></v-divider>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="showTimePicker = false; resetTimePicker();">
+                              Anuller
+                            </v-btn>
+                            <v-btn color="success" @click="showTimePicker = false;">
+                              Gem
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+
+                      <v-card>
+                        <v-spacer></v-spacer>
+                        <v-btn text @click="resetArea();" class="my-6">Anuller</v-btn>
+                        <v-btn color="success" @click="finishAndCreateArea();" class="my-6">Opret område</v-btn>
+                      </v-card>
                     </v-stepper-content>
                   </v-stepper>
-                </template>
-              </v-row>
+                </v-sheet>
             </v-col>
           </v-row>
         </v-container>
       </div> <!--height: 50px; width: 50px; background-color: red; position: absolute; bottom: 0; -->
     </div>
+
     <v-btn @click="snackbar = true">End area</v-btn>
     <v-btn @click="showStepper = !showStepper">Toggle stepper</v-btn>
+
     <v-snackbar v-model="snackbar" :color="snackbarColor">
       {{ snackbarText }}
       <v-btn color="white" text @click="snackbar = false">Luk</v-btn>
@@ -60,11 +126,16 @@ export default {
     zoomLevel: 13,
     baseUrl: 'http://localhost:8626/',
     hardcodedUser: null,
+    hardcodedArea: null,
+    drawControl: null,
+    drawnItems: null,
 
-    selectedAreaCoords: [],
+    selectedAreaCoords: {
+      coordinates: []
+    },
     selectedAreaName: '',
-    selectedAreaDate: '',
-    selectedAreaTime: '',
+    datePicker: new Date().toISOString().substr(0, 10),
+    timePicker: null,
 
     snackbar: false,
     snackbarText: 'Område oprettet! \n Tryk for at gå til mine område',
@@ -74,14 +145,11 @@ export default {
     stepperVertical: true,
     showStepper: true,
     justify: 'center',
-    alignment: 'end'
+    alignment: 'end',
+
+    showDatePicker: false,
+    showTimePicker: false
   }),
-  // watch: {
-  //   vertical () {
-  //     this.stepper = 2
-  //     requestAnimationFrame(() => this.stepper = 1)
-  //   }
-  // },
   methods: {
     initMap() {
       //creates a map, targets the DOM element with the ID 'map'
@@ -113,70 +181,53 @@ export default {
         [51.51, -0.047]
       ]).addTo(this.map);
       // console.log(polygon);
-
       //hardcoded popupbind
       polygon.bindPopup(`This area was completed by ${this.hardcodedUser.firstName}!`);
 
+      //Reverses the order since GeoJSON saves as LngLat, but Leaflet uses LatLng
+      let mappedArray = [];
+      this.hardcodedArea.areaLocationData.coordinates.forEach(element => {
+        element.forEach(coord => {
+          mappedArray.push(coord.reverse());
+        });
+      });
+      L.polygon(mappedArray).addTo(this.map);
+      console.log("mapped", mappedArray);
+
+
       //Leaflet.draw
-      let drawnItems = new L.FeatureGroup();
-      this.map.addLayer(drawnItems);
+      this.drawnItems = new L.FeatureGroup();
+      this.map.addLayer(this.drawnItems);
 
       //Leaflet.draw toolbar settings
-      let drawControl = new L.Control.Draw({
+      this.drawControl = new L.Control.Draw({
         draw: {
           circle: false,
           rectangle: false,
           polyline: false,
           marker: false,
           circlemarker: false,
-          polygon: false
+          polygon: {
+            shapeOptions: {
+              color: '#3FBF04'
+            }
+          }
         },
         edit: {
-          featureGroup: drawnItems,
+          featureGroup: this.drawnItems,
           edit: false
         }
       });
 
-      //Layer color
-      // drawControl.setDrawingOptions({
-      //   polygon: {
-      //     shapeOptions: {
-      //         color: '#3FBF04'
-      //       }
-      //   }
-      // });
+      this.map.addControl(this.drawControl);
 
-      this.map.addControl(drawControl);
-
+      let self = this;
       this.map.on('draw:created', function(e) {
         let layer  = e.layer;
-        drawnItems.addLayer(layer);
-        // console.log(`Layer data: ${layer} As GeoJSON: ${layer.toGeoJSON()}`);
+        self.drawnItems.addLayer(layer);
         console.log(layer.toGeoJSON());
       })
     },
-
-
-    // locateUser() {
-    //   //what happens when a user locates themselves
-    //   let map = this.map;
-    //   map.locate({setView: true, watch: true})
-    //     .on('locationfound', function(e) {
-    //       var marker = L.marker([e.latitude, e.longitude]).bindPopup('Your are here :)');
-    //       var circle = L.circle([e.latitude, e.longitude], e.accuracy/2, {
-    //           weight: 1,
-    //           color: 'blue',
-    //           fillColor: '#cacaca',
-    //           fillOpacity: 0.2
-    //       });
-    //       map.addLayer(marker);
-    //       map.addLayer(circle);
-    //     })
-    //     .on('locationerror', function(e) {
-    //       console.log(e);
-    //       alert('Location access denied.');
-    //     });
-    // },
 
     drawArea() {
       let self = this;
@@ -184,9 +235,13 @@ export default {
       
       this.map.on('draw:created', function(e) {
         areaCoords = e.layer;
-        // console.log("drawArea() ", areaCoords.toGeoJSON());
-        self.selectedAreaCoords = areaCoords.toGeoJSON().geometry.coordinates;
-        console.log("selectedCoords ", self.selectedAreaCoords);
+        self.selectedAreaCoords.coordinates = areaCoords.toGeoJSON().geometry.coordinates;
+
+        // let mappedAreaCoords = []; 
+        // areaCoords.toGeoJSON().geometry.coordinates.map(x => mappedAreaCoords.push(x));
+        // console.log('mapped:', mappedAreaCoords);
+
+        console.log("selectedCoords ", self.selectedAreaCoords.coordinates);
         self.showStepper = true;
       })
     },
@@ -195,30 +250,97 @@ export default {
       this.stepper = 1;
       this.showStepper = false;
       this.snackbar = true;
+      console.log('Area:', this.selectedAreaCoords.coordinates,'\n', 'Name:', this.selectedAreaName,'\n', 'Date:', this.datePicker,'\n', 'Time:', this.timePicker);
+      this.postArea();
     },
-
     resetArea() {
       this.stepper = 1;
       this.showStepper = false;
-      this.selectedAreaCoords = [];
+      this.selectedAreaCoords = {};
       this.selectedAreaName = '';
     },
-
-
+    resetDatePicker() {
+      this.datePicker = new Date().toISOString().substr(0, 10);
+    },
+    resetTimePicker() {
+      this.timePicker = null;
+    },
     getMapCoordsOnClick() {
       this.map.on('click', function(e) {
         console.log(e.latlng.lat, e.latlng.lng);
       });
     },
 
-    // postArea() {
-    //   //get jwt from local
-    //   //get userId from local
-    //   axios({
-    //     method: 'post',
-    //     url: 
-    //   })
-    // },
+    getAllAreas() {
+      axios({
+        method: 'get',
+        url: this.baseUrl + 'areas',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: false
+      }).then((response) => {
+        console.log("GET ALL: ", response); 
+        let mappedData = [];
+        response.data.areas.forEach(area => {
+          // console.log('foreach area', area);
+          area.areaLocationData.coordinates.forEach(el => {
+          // console.log('foreach el', el);
+            el.forEach(coord => {
+              // console.log('foreach coord', coord);
+              mappedData.push(coord.reverse());
+            });
+            // console.log('mappedData', mappedData);
+          });
+          L.polygon(mappedData).addTo(this.map);
+        });
+      }).catch((error) => {
+        console.log(error); 
+      });
+    },
+
+    async getArea() {
+      try {
+        const res = await axios({
+          method: 'get',
+          url: this.baseUrl + 'areas/5de410604984104b20738222',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: false
+        });
+        this.hardcodedArea = res.data.area;
+        console.log("GET request area success: ", res.data)
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    postArea() {
+      // let jwt = localStorage.getItem("jwt");
+      let userId = localStorage.getItem("userId");
+
+      let area = {
+        title: this.selectedAreaName,
+        userId: userId,
+        areaStartDate: this.datePicker,
+        areaStartTime: this.timePicker,
+        areaLocationData: {
+          coordinates: this.selectedAreaCoords.coordinates
+        }
+      };
+
+      axios({
+        method: 'post',
+        url: this.baseUrl + 'areas',
+        data: area,
+        withCredentials: false
+      }).then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
 
     async getUser() {
       try {
@@ -240,18 +362,19 @@ export default {
 
   async mounted() {
     await this.getUser(); //await da mounted() ellers ville køre asynkront og dataen fra getUser() først ville komme ind efter den skulle bruges
+    await this.getArea();
     this.initMap();
     this.getMapCoordsOnClick();
     console.log("Hardcoded user: ", this.hardcodedUser);
+    this.getAllAreas();
   }
 };
 </script>
 
 <style lang="scss" scoped>
 #map {
-  height: 500px;
+  height: 700px;
   position: relative;
-  // background-color: red;
 }
 html,
 body {
@@ -259,7 +382,7 @@ body {
   width: 480px;
   margin: 0px;
 }
-.v-snack__content {
-  color: #000000;
+.v-dialog__content {
+  z-index: 2500 !important;
 }
 </style>

@@ -5,6 +5,8 @@ const areaSchema = mongoose.Schema({
     title: { type: String, required: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     areaCompleted: { type: Boolean, default: false },
+    areaStartDate: { type: String, required: true },
+    areaStartTime: { type: String, required: true },
     areaDetails: {
         trash: { type: Number },
         steps: { type: Number },
@@ -12,7 +14,7 @@ const areaSchema = mongoose.Schema({
     },
     areaLocationData: {
         type: { type: String, default: 'Polygon' },
-        coordinates: { type: [Number] },
+        coordinates: { type: Array },
         index: { type: String, default: '2dsphere' }
     }
 });

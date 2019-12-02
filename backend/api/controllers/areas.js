@@ -38,10 +38,9 @@ exports.areas_create_area = (req, res, next) => {
             _id: mongoose.Types.ObjectId(),
             title: req.body.title,
             user: req.body.userId,
-            areaLocationData: {
-                type: req.body.areaLocationData.type,
-                coordinates: req.body.areaLocationData.coordinates
-            }
+            areaStartDate: req.body.areaStartDate,
+            areaStartTime: req.body.areaStartTime,
+            areaLocationData: req.body.areaLocationData
         });
         return area.save();
     })
@@ -53,10 +52,9 @@ exports.areas_create_area = (req, res, next) => {
                 _id: result._id,
                 title: result.title,
                 user: result.user,
-                areaLocationData: {
-                    type: result.areaLocationData.type,
-                    coordinates: result.areaLocationData.coordinates
-                }
+                areaStartDate: result.areaStartDate,
+                areaStartTime: result.areaStartTime,
+                areaLocationData: result.areaLocationData
             },
             request: {
                 type: 'GET',
