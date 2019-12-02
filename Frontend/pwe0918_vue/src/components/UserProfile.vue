@@ -4,7 +4,7 @@
     >
         <v-avatar
         size="164">
-            <v-img>mdi -mdi-account-circle</v-img> 
+            <v-img>mdi mdi-account-circle</v-img> 
         </v-avatar>
         <v-list-item
         color="rgba(0, 0, 0, .4">

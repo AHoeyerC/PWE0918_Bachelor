@@ -1,16 +1,6 @@
 <template>
   <nav>
-    <div id="menu">
-      <v-btn class="menu-button" @click="() => (showMenu = !showMenu)" :href="!showMenu ? '#0':'#menu'" fab>
-        <v-icon
-        :class="!showMenu ? 'mdi mdi-plus-circle' : 'mdi mdi-close-circle'">
-        </v-icon>
-      </v-btn>
-        <div class="menu-item">
-        <v-btn href="#menu" @click="overlayStartOmraade = !overlayStartOmraade" fab elevation="0">
-          <v-icon>mdi mdi-calendar-plus</v-icon>
-        </v-btn>
-        <v-overlay
+    <v-overlay
             :opacity="1"
             :absolute= false
             :value="overlayStartOmraade"
@@ -28,15 +18,11 @@
             X
           </v-btn>
         </v-overlay>
-        </div>
-        <div class="menu-item">
-        <v-btn href="#menu" @click="overlayMineOmraader = !overlayMineOmraader" fab elevation="0">
-          <v-icon>mdi mdi-flag</v-icon>
-        </v-btn>
         <v-overlay
             :opacity="1"
             :absolute= false
             :value="overlayMineOmraader"
+            z-index="5000"
         >        
         <MineOmraader
           v-if="showMineOmraader"
@@ -50,15 +36,11 @@
               X
             </v-btn>
           </v-overlay>
-    </div>
-          <div class="menu-item">
-        <v-btn href="#menu" @click="overlayLeaderboard = !overlayLeaderboard" fab elevation="0">
-          <v-icon>mdi mdi-format-list-numbered</v-icon>
-        </v-btn>
-        <v-overlay
+          <v-overlay
             :opacity="1"
             :absolute= false
             :value="overlayLeaderboard"
+            z-index="5000"
         >        
          <Leaderboard
           v-if="showLeaderboard"
@@ -72,15 +54,11 @@
             X
           </v-btn>
         </v-overlay>
-    </div>
-        <div class="menu-item">
-        <v-btn href="#menu" @click="overlayTrofae = !overlayTrofae" fab elevation="0">
-          <v-icon>mdi mdi-trophy</v-icon>
-        </v-btn>
         <v-overlay
             :opacity="1"
             :absolute= false
             :value="overlayTrofae"
+            z-index="5000"
         >        
          <Trofae
           v-if="showTrofae"
@@ -94,6 +72,31 @@
             X
           </v-btn>
         </v-overlay>
+    <div id="menu">
+      <v-btn class="menu-button" @click="() => (showMenu = !showMenu)" :href="!showMenu ? '#0':'#menu'" fab>
+        <v-icon
+        :class="!showMenu ? 'mdi mdi-plus-circle' : 'mdi mdi-close-circle'">
+        </v-icon>
+      </v-btn>
+        <div class="menu-item">
+        <v-btn href="#menu" @click="overlayStartOmraade = !overlayStartOmraade" fab elevation="0">
+          <v-icon>mdi mdi-calendar-plus</v-icon>
+        </v-btn>
+        </div>
+        <div class="menu-item">
+        <v-btn href="#menu" @click="overlayMineOmraader = !overlayMineOmraader" fab elevation="0">
+          <v-icon>mdi mdi-flag</v-icon>
+        </v-btn>
+    </div>
+          <div class="menu-item">
+        <v-btn href="#menu" @click="overlayLeaderboard = !overlayLeaderboard" fab elevation="0">
+          <v-icon>mdi mdi-format-list-numbered</v-icon>
+        </v-btn>
+    </div>
+        <div class="menu-item">
+        <v-btn href="#menu" @click="overlayTrofae = !overlayTrofae" fab elevation="0">
+          <v-icon>mdi mdi-trophy</v-icon>
+        </v-btn>
     </div>
       </div>
   </nav>
