@@ -24,7 +24,7 @@
           width="100"
         />
       </div>
-<ul id="menu">
+<!-- <ul id="menu">
         <a class="menu-button icon-plus" href="#menu" title="Show navigation"><span class="mdi mdi-close"></span></a>
         <a class="menu-button icon-minus" href="#0" title="Hide navigation"><span class="mdi mdi-close"></span></a>
         <li class="menu-item">
@@ -47,8 +47,9 @@
         <span class="mdi mdi-account"></span>
         </a>
     </li>
-    </ul>
+    </ul> -->
       <v-spacer></v-spacer>
+      <v-icon>mdi mdi-account-circle</v-icon>
     </v-app-bar>
     <router-link to="/"></router-link>
     <router-link to="/registration"></router-link>

@@ -1,18 +1,20 @@
 <template>
   <nav>
-    <div>
-      <v-btn>
-        <v-icon>mdi mdi-plus-circle</v-icon>
+    <div id="menu">
+      <v-btn class="menu-button" @click="() => (showMenu = !showMenu)" :href="!showMenu ? '#0':'#menu'" fab>
+        <v-icon
+        :class="!showMenu ? 'mdi mdi-plus-circle' : 'mdi mdi-close-circle'">
+        </v-icon>
       </v-btn>
-      <div>
-        <v-btn @click="overlayStartOmraade = !overlayStartOmraade">
+        <div class="menu-item">
+        <v-btn href="#menu" @click="overlayStartOmraade = !overlayStartOmraade" fab elevation="0">
           <v-icon>mdi mdi-calendar-plus</v-icon>
-          <span>Start Område</span>
         </v-btn>
         <v-overlay
-            :opacity="100"
+            :opacity="1"
             :absolute= false
             :value="overlayStartOmraade"
+            z-index="5000"
         >        
          <StartOmraade
           v-if="showStartOmraade"
@@ -26,12 +28,13 @@
             X
           </v-btn>
         </v-overlay>
-        <v-btn @click="overlayMineOmraader = !overlayMineOmraader">
+        </div>
+        <div class="menu-item">
+        <v-btn href="#menu" @click="overlayMineOmraader = !overlayMineOmraader" fab elevation="0">
           <v-icon>mdi mdi-flag</v-icon>
-          <span>Mine Områder</span>
         </v-btn>
         <v-overlay
-            :opacity="100"
+            :opacity="1"
             :absolute= false
             :value="overlayMineOmraader"
         >        
@@ -47,12 +50,13 @@
               X
             </v-btn>
           </v-overlay>
-        <v-btn @click="overlayLeaderboard = !overlayLeaderboard">
-          <v-icon>mdi mdi-format-list-bulleted</v-icon>
-          <span>Leaderboard</span>
+    </div>
+          <div class="menu-item">
+        <v-btn href="#menu" @click="overlayLeaderboard = !overlayLeaderboard" fab elevation="0">
+          <v-icon>mdi mdi-format-list-numbered</v-icon>
         </v-btn>
         <v-overlay
-            :opacity="100"
+            :opacity="1"
             :absolute= false
             :value="overlayLeaderboard"
         >        
@@ -68,12 +72,13 @@
             X
           </v-btn>
         </v-overlay>
-        <v-btn @click="overlayTrofae = !overlayTrofae">
+    </div>
+        <div class="menu-item">
+        <v-btn href="#menu" @click="overlayTrofae = !overlayTrofae" fab elevation="0">
           <v-icon>mdi mdi-trophy</v-icon>
-          <span>Trofæer</span>
         </v-btn>
         <v-overlay
-            :opacity="100"
+            :opacity="1"
             :absolute= false
             :value="overlayTrofae"
         >        
@@ -89,8 +94,8 @@
             X
           </v-btn>
         </v-overlay>
-      </div>
     </div>
+      </div>
   </nav>
 </template>
 
@@ -119,7 +124,8 @@ export default {
       showStartOmraade: true,
       showMineOmraader: true,
       showLeaderboard: true,
-      showTrofae: true
+      showTrofae: true,
+      showMenu: false
   }),
   methods: {
     fetchStart () {

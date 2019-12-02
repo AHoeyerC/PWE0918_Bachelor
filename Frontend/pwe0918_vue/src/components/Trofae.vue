@@ -2,7 +2,7 @@
   <v-sheet
     width="95vw" height="90vh"
   >
-    <v-tabs
+    <!-- <v-tabs
       grow
     >
       <v-tab>
@@ -32,7 +32,7 @@
           </v-item>
         </v-item-group>
       </v-tab-item>
-    </v-tabs>
+    </v-tabs> -->
   </v-sheet>
 </template>
 
