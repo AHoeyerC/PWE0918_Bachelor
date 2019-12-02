@@ -181,18 +181,19 @@ export default {
         [51.51, -0.047]
       ]).addTo(this.map);
       // console.log(polygon);
-
-      var polygonTest = L.polygon([
-        [51.502652, -0.121536],
-        [51.479031, -0.092182],
-        [51.497095, -0.077763]
-      ]).addTo(this.map);
-      // var polygonTest = L.polygon(this.hardcodedArea.areaLocationData.coordinates).addTo(this.map);
-      console.log(polygonTest);
-      console.log(this.map);
-
       //hardcoded popupbind
       polygon.bindPopup(`This area was completed by ${this.hardcodedUser.firstName}!`);
+
+      //Reverses the order since GeoJSON saves as LngLat, but Leaflet uses LatLng
+      let mappedArray = [];
+      this.hardcodedArea.areaLocationData.coordinates.forEach(element => {
+        element.forEach(coord => {
+          mappedArray.push(coord.reverse());
+        });
+      });
+      L.polygon(mappedArray).addTo(this.map);
+      console.log("mapped", mappedArray);
+
 
       //Leaflet.draw
       this.drawnItems = new L.FeatureGroup();
@@ -252,22 +253,18 @@ export default {
       console.log('Area:', this.selectedAreaCoords.coordinates,'\n', 'Name:', this.selectedAreaName,'\n', 'Date:', this.datePicker,'\n', 'Time:', this.timePicker);
       this.postArea();
     },
-
     resetArea() {
       this.stepper = 1;
       this.showStepper = false;
       this.selectedAreaCoords = {};
       this.selectedAreaName = '';
     },
-
     resetDatePicker() {
       this.datePicker = new Date().toISOString().substr(0, 10);
     },
-
     resetTimePicker() {
       this.timePicker = null;
     },
-
     getMapCoordsOnClick() {
       this.map.on('click', function(e) {
         console.log(e.latlng.lat, e.latlng.lng);
@@ -284,6 +281,19 @@ export default {
         withCredentials: false
       }).then((response) => {
         console.log("GET ALL: ", response); 
+        let mappedData = [];
+        response.data.areas.forEach(area => {
+          // console.log('foreach area', area);
+          area.areaLocationData.coordinates.forEach(el => {
+          // console.log('foreach el', el);
+            el.forEach(coord => {
+              // console.log('foreach coord', coord);
+              mappedData.push(coord.reverse());
+            });
+            // console.log('mappedData', mappedData);
+          });
+          L.polygon(mappedData).addTo(this.map);
+        });
       }).catch((error) => {
         console.log(error); 
       });
@@ -293,7 +303,7 @@ export default {
       try {
         const res = await axios({
           method: 'get',
-          url: this.baseUrl + 'areas/5de3ac1e4984104b20738220',
+          url: this.baseUrl + 'areas/5de410604984104b20738222',
           headers: {
             'Content-Type': 'application/json'
           },
@@ -304,39 +314,6 @@ export default {
       } catch (e) {
         console.log(e);
       }
-      // const res = await axios({
-      //   method: 'get',
-      //   url: this.baseUrl + 'areas/5de3ac1e4984104b20738220',
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   withCredentials: false
-      // }).then((response) => {
-      //   console.log("Hardcoded area: ", response);
-
-      //   // response.data.area.areaLocationData.coordinates.forEach(coord => {
-      //   //   console.log(coord);
-      //   // });
-
-      //   // let coordsArray = response.data.area.areaLocationData.coordinates;
-      //   // console.log(coordsArray);
-
-      //   // var polygon = L.polygon([
-      //   //   [-0.121536, 51.502652],
-      //   //   [-0.092182, 51.479031],
-      //   //   [-0.077763, 51.497095]
-      //   // ]).addTo(this.map);
-      //   // console.log(polygon);
-
-      //   // var polyLayer = L.polygon(coordsArray);
-      //   // console.log(L.polygon(coordsArray), polyLayer);
-
-      //   // this.drawnItems.addLayer(polyLayer);
-      //   // console.log(this.map);
-
-      // }).catch((error) => {
-      //   console.log(error);
-      // });
     },
 
     postArea() {
@@ -358,9 +335,6 @@ export default {
         url: this.baseUrl + 'areas',
         data: area,
         withCredentials: false
-        // headers: {
-        //   'Content-Type': 'application/json'
-        // }
       }).then((response) => {
         console.log(response);
       }).catch((error) => {
@@ -392,7 +366,7 @@ export default {
     this.initMap();
     this.getMapCoordsOnClick();
     console.log("Hardcoded user: ", this.hardcodedUser);
-    // this.getAllAreas();
+    this.getAllAreas();
   }
 };
 </script>
