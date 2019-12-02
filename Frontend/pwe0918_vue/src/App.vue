@@ -49,6 +49,7 @@
     </li>
     </ul> -->
       <v-spacer></v-spacer>
+      <v-icon>mdi mdi-account-circle</v-icon>
     </v-app-bar>
     <router-link to="/"></router-link>
     <router-link to="/registration"></router-link>
