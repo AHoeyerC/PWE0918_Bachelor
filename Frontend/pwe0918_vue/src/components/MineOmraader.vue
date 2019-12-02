@@ -2,6 +2,13 @@
   <v-sheet
      width="95vw" height="90vh"
   >
+  <v-container>
+    <v-row>
+      <v-col cols="12" justify="center" align="center">
+        Mine områder
+      </v-col>
+    </v-row>
+  </v-container>
     <v-tabs
       grow
     >

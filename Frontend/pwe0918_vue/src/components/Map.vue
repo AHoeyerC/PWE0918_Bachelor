@@ -117,6 +117,7 @@ import * as L from "leaflet";
 import 'leaflet.locatecontrol';
 import axios from 'axios';
 import 'leaflet-draw';
+import { EventBus } from '../event-bus';
 
 export default {
   name: "Map",
@@ -143,12 +144,14 @@ export default {
 
     stepper: 1,
     stepperVertical: true,
-    showStepper: true,
+    showStepper: false,
     justify: 'center',
     alignment: 'end',
 
     showDatePicker: false,
-    showTimePicker: false
+    showTimePicker: false,
+
+    eventBusTestCount: 0
   }),
   methods: {
     initMap() {
@@ -344,10 +347,27 @@ export default {
         withCredentials: false
       }).then((response) => {
         console.log(response);
-
+        this.addAreaToUser(userId, response.data.createdArea._id); //forwards the userId from localstorage and the newly created areaId to the 'addAreaToUser' method
       }).catch((error) => {
         console.log(error);
       });
+    },
+
+    addAreaToUser(userId, aId) {
+      let area = {
+        areaId: aId
+      };
+      axios({
+        method: 'post',
+        url: this.baseUrl + 'user/addArea/' + userId,
+        data: area,
+        withCredentials: false
+      }).then((response) => {
+        console.log("addAreaToUser:", response);
+      }).catch((error) => {
+        console.log(error);
+      })
+
     },
 
     async getUser() {
@@ -375,6 +395,11 @@ export default {
     this.getMapCoordsOnClick();
     console.log("Hardcoded user: ", this.hardcodedUser);
     this.getAllAreas();
+
+    //start an area
+    EventBus.$on('start-area', showStartOmraade => {
+      this.showStepper = showStartOmraade;
+    });
   }
 };
 </script>

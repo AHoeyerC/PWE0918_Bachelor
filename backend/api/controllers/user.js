@@ -111,9 +111,42 @@ exports.user_login = (req, res, next) => {
     });
 };
 
+exports.user_add_area = (req, res, next) => {
+    User.findOneAndUpdate(
+        {_id: req.params.userId},
+        {$push: {"userData.incompleteAreas": { area: req.body.areaId }}},
+        {safe: true, upsert: true}
+    ).exec()
+    .then(user => {
+        console.log("Added area to user", user);
+        if (user) {
+            res.status(200).json({
+                message: 'Successfully added area to user',
+                request: {
+                    type: 'POST',
+                    url: 'http://localhost:8626/user/' + user._id
+                }
+            });
+        } else {
+            res.status(404).json({message: "Could not add area to user"});
+        }
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
+};
+
 exports.user_get_user = (req, res, next) => {
     const id = req.params.userId;
     User.findById(id)
+    .select('-__v')
+    .populate({
+        path: 'userData.incompleteAreas.area',
+        select: 'title areaCompleted areaStartDate areaStartTime areaDetails',
+        model: 'Area'
+    })
     .exec()
     .then(user => {
         console.log(user);

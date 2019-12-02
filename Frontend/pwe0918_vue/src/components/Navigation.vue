@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-overlay
+    <!-- <v-overlay
             :opacity="1"
             :absolute= false
             :value="overlayStartOmraade"
@@ -17,7 +17,7 @@
           >
             X
           </v-btn>
-        </v-overlay>
+        </v-overlay> -->
         <v-overlay
             :opacity="1"
             :absolute= false
@@ -79,7 +79,7 @@
         </v-icon>
       </v-btn>
         <div class="menu-item">
-        <v-btn href="#menu" @click="overlayStartOmraade = !overlayStartOmraade" fab elevation="0">
+        <v-btn href="#menu" @click="fetchStart();" fab elevation="0"> <!--overlayStartOmraade = !overlayStartOmraade-->
           <v-icon>mdi mdi-calendar-plus</v-icon>
         </v-btn>
         </div>
@@ -103,16 +103,17 @@
 </template>
 
 <script>
-import StartOmraade from "./StartOmraade"
-import MineOmraader from "./MineOmraader"
-import Leaderboard from "./Leaderboard"
-import Trofae from "./Trofae"
+// import StartOmraade from "./StartOmraade";
+import MineOmraader from "./MineOmraader";
+import Leaderboard from "./Leaderboard";
+import Trofae from "./Trofae";
+import { EventBus } from "../event-bus";
 
 export default {
   name: "Navigation",
 
   components: {
-    StartOmraade,
+    // StartOmraade,
     MineOmraader,
     Leaderboard,
     Trofae
@@ -124,15 +125,17 @@ export default {
       overlayMineOmraader: false,
       overlayLeaderboard: false,
       overlayTrofae: false,
-      showStartOmraade: true,
       showMineOmraader: true,
       showLeaderboard: true,
       showTrofae: true,
-      showMenu: false
+      showMenu: false,
+
+      showStartOmraade: false
   }),
   methods: {
     fetchStart () {
-      this.showStartOmraade = !this.showStartOmraade
+      this.showStartOmraade = !this.showStartOmraade;
+      EventBus.$emit('start-area', this.showStartOmraade);
     },
     fetchOmraader () {
       this.showMineOmraader = !this.showMineOmraader;
@@ -142,8 +145,7 @@ export default {
     },
     fetchTrofae () {
       this.showTrofae = !this.showTrofae;
-    },
-
+    }
   }
 };
 </script>
