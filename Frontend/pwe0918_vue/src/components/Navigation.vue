@@ -1,77 +1,77 @@
 <template>
   <nav>
     <v-overlay
-            :opacity="1"
-            :absolute= false
-            :value="overlayStartOmraade"
-            z-index="5000"
-        >        
-         <StartOmraade
-          v-if="showStartOmraade"
-          >
-          </StartOmraade>
-          <v-btn
-            fab
-            color="red"
-           @click="overlayStartOmraade = false"
-          >
-            X
-          </v-btn>
-        </v-overlay>
-        <v-overlay
-            :opacity="1"
-            :absolute= false
-            :value="overlayMineOmraader"
-            z-index="5000"
-        >        
-        <MineOmraader
-          v-if="showMineOmraader"
-        >
-        </MineOmraader>
-            <v-btn
-              fab
-              color="red"
-              @click="overlayMineOmraader = false"
-            >
-              X
-            </v-btn>
-          </v-overlay>
-          <v-overlay
-            :opacity="1"
-            :absolute= false
-            :value="overlayLeaderboard"
-            z-index="5000"
-        >        
-         <Leaderboard
-          v-if="showLeaderboard"
-          >
-          </Leaderboard>
-          <v-btn
-            fab
-            color="red"
-           @click="overlayLeaderboard = false"
-          >
-            X
-          </v-btn>
-        </v-overlay>
-        <v-overlay
-            :opacity="1"
-            :absolute= false
-            :value="overlayTrofae"
-            z-index="5000"
-        >        
-         <Trofae
-          v-if="showTrofae"
-          >
-          </Trofae>
-          <v-btn
-            fab
-            color="red"
-           @click="overlayTrofae = false"
-          >
-            X
-          </v-btn>
-        </v-overlay>
+      :opacity="1"
+      :absolute= false
+      :value="overlayStartOmraade"
+      z-index="5000"
+    >        
+      <StartOmraade
+        v-if="showStartOmraade"
+      >
+      </StartOmraade>
+      <v-btn
+        fab
+        color="red"
+        @click="overlayStartOmraade = false"
+      >
+        X
+      </v-btn>
+    </v-overlay>
+    <v-overlay
+      :opacity="1"
+      :absolute= false
+      :value="overlayMineOmraader"
+      z-index="5000"
+    >        
+      <MineOmraader
+        v-if="showMineOmraader"
+      >
+      </MineOmraader>
+      <v-btn
+        fab
+        color="red"
+        @click="overlayMineOmraader = false"
+      >
+        X
+      </v-btn>
+    </v-overlay>
+    <v-overlay
+      :opacity="1"
+      :absolute= false
+      :value="overlayLeaderboard"
+      z-index="5000"
+    >        
+      <Leaderboard
+        v-if="showLeaderboard"
+      >
+      </Leaderboard>
+      <v-btn
+        fab
+        color="red"
+        @click="overlayLeaderboard = false"
+      >
+        X
+      </v-btn>
+    </v-overlay>
+    <v-overlay
+      :opacity="1"
+      :absolute= false
+      :value="overlayTrofaer"
+      z-index="5000"
+    >        
+      <Trofaer
+        v-if="showTrofaer"
+      >
+      </Trofaer>
+      <v-btn
+        fab
+        color="red"
+        @click="overlayTrofaer = false"
+      >
+        X
+      </v-btn>
+    </v-overlay>
     <div id="menu">
       <v-btn class="menu-button" @click="() => (showMenu = !showMenu)" :href="!showMenu ? '#0':'#menu'" fab>
         <v-icon
@@ -94,7 +94,7 @@
         </v-btn>
     </div>
         <div class="menu-item">
-        <v-btn href="#menu" @click="overlayTrofae = !overlayTrofae" fab elevation="0">
+        <v-btn href="#menu" @click="overlayTrofaer = !overlayTrofaer" fab elevation="0">
           <v-icon>mdi mdi-trophy</v-icon>
         </v-btn>
     </div>
@@ -106,7 +106,7 @@
 import StartOmraade from "./StartOmraade"
 import MineOmraader from "./MineOmraader"
 import Leaderboard from "./Leaderboard"
-import Trofae from "./Trofae"
+import Trofaer from "./Trofaer"
 
 export default {
   name: "Navigation",
@@ -115,7 +115,7 @@ export default {
     StartOmraade,
     MineOmraader,
     Leaderboard,
-    Trofae
+    Trofaer
   },
 
   data: () => ({
@@ -123,11 +123,11 @@ export default {
       overlayStartOmraade: false,
       overlayMineOmraader: false,
       overlayLeaderboard: false,
-      overlayTrofae: false,
+      overlayTrofaer: false,
       showStartOmraade: true,
       showMineOmraader: true,
       showLeaderboard: true,
-      showTrofae: true,
+      showTrofaer: true,
       showMenu: false
   }),
   methods: {
@@ -140,10 +140,9 @@ export default {
     fetchLeaderboard () {
       this.showLeaderboard = !this.showLeaderboard;
     },
-    fetchTrofae () {
-      this.showTrofae = !this.showTrofae;
+    fetchTrofaer () {
+      this.showTrofaer = !this.showTrofaer;
     },
-
   }
 };
 </script>
