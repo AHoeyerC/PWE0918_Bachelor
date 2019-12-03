@@ -367,7 +367,6 @@ export default {
       }).catch((error) => {
         console.log(error);
       })
-
     },
 
     async getUser() {

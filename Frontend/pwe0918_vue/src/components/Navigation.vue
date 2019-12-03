@@ -28,13 +28,15 @@
           v-if="showMineOmraader"
         >
         </MineOmraader>
-            <v-btn
-              fab
-              color="red"
-              @click="overlayMineOmraader = false"
-            >
-              X
-            </v-btn>
+
+            <v-container>
+              <v-row>
+                <v-col cols="12" align="center">
+                  <v-btn fab color="red" @click="overlayMineOmraader = false" fixed bottom style="margin-left: -28px;">X</v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
+
           </v-overlay>
           <v-overlay
             :opacity="1"

@@ -1,0 +1,33 @@
+@import 'styles/utilities/variables.scss';
+
+.header-grey {
+    background-color: #F5F5F5;
+}
+.theme--light {
+    &.v-sheet {
+        &.header-grey {
+            background-color: #F5F5F5;
+            font-size: $h5;
+        }
+    }
+}
+.area-title {
+    user-select: none;
+}
+.v-responsive {
+    &.single-area_img {
+        overflow: visible;
+        button:first-child {
+            margin-left: -20px;
+        }
+        button:last-child {
+            margin-right: -20px;
+        }
+    }
+}
+.single-area_btns {
+    width: 120px; 
+    height: 300px; 
+    position: relative; 
+    margin-top: -24px;
+}
