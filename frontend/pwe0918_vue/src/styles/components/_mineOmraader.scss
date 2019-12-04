@@ -31,3 +31,27 @@
     position: relative; 
     margin-top: -24px;
 }
+.snackbar-text {
+    color: #000000;
+}
+.theme--light {
+    &.v-card > .v-card__text {
+        &.snackbar-text {
+            color: #000000;
+        }
+    }
+}
+.allow-overflow {
+    .v-stepper__wrapper {
+        overflow: visible !important;
+    }
+}
+.dropdown-toggle {
+    padding-bottom: 6px !important;
+}
+.btn-group {
+    margin: -2px 1px !important;
+}
+// .v-stepper__wrapper {
+//     overflow: visible !important;
+// }

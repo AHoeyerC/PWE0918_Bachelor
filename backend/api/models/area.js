@@ -8,15 +8,16 @@ const areaSchema = mongoose.Schema({
     areaStartDate: { type: String, required: true },
     areaStartTime: { type: String, required: true },
     areaDetails: {
-        trash: { type: Number },
-        steps: { type: Number },
-        squareMeters: { type: Number }
+        trash: { type: Number, default: 0 },
+        steps: { type: Number, default: 0 },
+        squareMeters: { type: Number, default: 0 }
     },
     areaLocationData: {
         type: { type: String, default: 'Polygon' },
         coordinates: { type: Array },
         index: { type: String, default: '2dsphere' }
-    }
+    },
+    areaCreationDate: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Area', areaSchema);

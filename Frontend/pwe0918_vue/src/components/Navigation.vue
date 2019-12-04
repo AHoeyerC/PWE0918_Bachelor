@@ -132,7 +132,8 @@ export default {
       showTrofae: true,
       showMenu: false,
 
-      showStartOmraade: false
+      showStartOmraade: false,
+      backToMineOmraader: false
   }),
   methods: {
     fetchStart () {
@@ -147,7 +148,12 @@ export default {
     },
     fetchTrofae () {
       this.showTrofae = !this.showTrofae;
-    }
+    },
+  },
+  mounted() {
+    EventBus.$on('back-to-mine-omraader', redirectToMineOmraader => {
+      this.backToMineOmraader = redirectToMineOmraader;
+    });
   }
 };
 </script>
