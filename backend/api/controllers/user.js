@@ -7,6 +7,7 @@ const User = require('../models/user');
 
 exports.user_get_all = (req, res, next) => {
     User.find()
+    .select('-__v -password')
     .exec()
     .then(users => {
         const response = {
@@ -222,7 +223,7 @@ exports.user_remove_completed_area = (req, res, next) => {
 exports.user_get_user = (req, res, next) => {
     const id = req.params.userId;
     User.findById(id)
-    .select('-__v')
+    .select('-__v -password')
     .populate({
         path: 'userData.incompleteAreas.area',
         select: 'title areaCompleted areaStartDate areaStartTime areaDetails',

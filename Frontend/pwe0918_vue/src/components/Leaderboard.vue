@@ -1,218 +1,134 @@
 <template>
-  <v-sheet
-    width="95vw" height="90vh"
-  >
-    <v-tabs
-      grow
-    >
-      <v-tab>Uge</v-tab>
-      <v-tab>Månede</v-tab>
-      <v-tab>Altid</v-tab>
-
-      <v-tab-item
-        v-for="n in 3"
-        :key="n"
-      >
-        <v-item-group>
-          <v-item
-              v-slot:default="{ active, toggle }"
-              v-for="i in 1"
-              :key="i">
-            <v-data-table hide-default-footer
-              :headers="headers"
-              :items="desserts"  
-              class="elevation-1"
-            ></v-data-table>
-          </v-item>
-        </v-item-group>
-      </v-tab-item>
+  <v-sheet width="95vw" height="90vh" light>
+    <v-container fluid class="header-grey py-1">
+      <v-row>
+        <v-col cols="12" justify="center" align="center">
+          <v-sheet class="header-grey">
+            Leaderboard - {{ activeFilter }}
+            <v-menu left offset-y>
+              <template v-slot:activator="{ on }">
+                <v-btn color="black" icon dark v-on="on">
+                  <v-icon>mdi-chevron-down</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item v-for="(filter, index) in filters" :key="index" @click="activeFilter = filter;">
+                  <v-list-item-title>{{ filter }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-sheet>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-tabs grow v-model="currentTab">
+      <v-tab v-for="tab in tabs" :key="tab" :href="'#tab-' + tab">
+        {{ tab }}
+      </v-tab>
+      <v-tabs-items v-model="currentTab">
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-sheet v-show="currentTab === 'tab-uge'">
+                <v-list>
+                  <v-list-item-group>
+                    <v-list-item color="success" disabled> <!--Header-->
+                      <v-container fluid class="py-0">
+                        <v-row>
+                          <v-col cols="1" class="py-0">
+                            <v-list-item-content>
+                              <v-list-item-title>Rank</v-list-item-title>
+                            </v-list-item-content>
+                          </v-col>
+                          <v-col cols="8" class="py-0">
+                            <v-list-item-content>
+                              <v-list-item-title>Navn</v-list-item-title>
+                            </v-list-item-content>
+                          </v-col>
+                          <v-col cols="3" class="py-0" align="end">
+                            <v-list-item-content>
+                              <v-list-item-title>Affald</v-list-item-title>
+                            </v-list-item-content>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-list-item>
+                    <v-list-item v-for="(user, index) in allUsers" :key="index"> <!--All users-->
+                      <v-container fluid class="py-0">
+                        <v-row>
+                          <v-col cols="1" class="py-0">
+                            <v-list-item-content>
+                              <v-list-item-title></v-list-item-title>
+                            </v-list-item-content>
+                          </v-col>
+                          <v-col cols="8" class="py-0">
+                            <v-list-item-content>
+                              <v-list-item-title>{{ user.username }}</v-list-item-title>
+                            </v-list-item-content>
+                          </v-col>
+                          <v-col cols="3" class="py-0" align="end">
+                            <v-list-item-content>
+                              <v-list-item-title></v-list-item-title>
+                            </v-list-item-content>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+              </v-sheet>
+              <v-sheet v-show="currentTab === 'tab-måned'">
+                Hej 2
+              </v-sheet>
+              <v-sheet v-show="currentTab === 'tab-altid'">
+                Hej 3
+              </v-sheet>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-tabs-items>
     </v-tabs>
   </v-sheet>
 </template>
 
 <script>
+import axios from 'axios';
   export default {
     name: "Leaderboard",
     data () {
       return {
-        totalDesserts: 0,
-        loading: true,
-        options: {},
-        headers: [
-          {
-            text: 'Dessert (100g serving)',
-            align: 'left',
-            sortable: false,
-            value: 'name',
-          },
-          { text: 'Calories', value: 'calories' },
-          { text: 'Fat (g)', value: 'fat' },
-          { text: 'Carbs (g)', value: 'carbs' },
-        ],
-        desserts: [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-          },
-        ],
+        filters: ['Skridt', 'Affald', 'Antal områder'],
+        activeFilter: 'Skridt',
+
+        tabs: [ 'uge', 'måned', 'altid' ],
+        currentTab: 'tab-uge',
+
+        baseUrl: 'http://localhost:8626/',
+        allUsers: []
       }
     },
-    // watch: {
-    //   options: {
-    //     handler () {
-    //       this.getDataFromApi()
-    //         .then(data => {
-    //           this.desserts = data.items
-    //           this.totalDesserts = data.total
-    //         })
-    //     },
-    //     deep: true,
-    //   },
-    // },
-    // mounted () {
-    //   this.getDataFromApi()
-    //     .then(data => {
-    //       this.desserts = data.items
-    //       this.totalDesserts = data.total
-    //     })
-    // },
-    // methods: {
-    //   getDataFromApi () {
-    //     this.loading = true
-    //     return new Promise((resolve, reject) => {
-    //       const { sortBy, sortDesc, page, itemsPerPage } = this.options
+    methods: {
+      async getAllUsers() {
+        axios({
+          method: 'get',
+          url: this.baseUrl + 'user',
+          withCredentials: false,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then((response) => {
+          this.allUsers = response.data.users;
+          console.log(response);
+        }).catch((error) => {
+          console.log(error);
+        });
+      },
+      // sortBySteps() {
 
-    //       let items = this.getDesserts()
-    //       const total = items.length
-
-    //       if (sortBy.length === 1 && sortDesc.length === 1) {
-    //         items = items.sort((a, b) => {
-    //           const sortA = a[sortBy[0]]
-    //           const sortB = b[sortBy[0]]
-
-    //           if (sortDesc[0]) {
-    //             if (sortA < sortB) return 1
-    //             if (sortA > sortB) return -1
-    //             return 0
-    //           } else {
-    //             if (sortA < sortB) return -1
-    //             if (sortA > sortB) return 1
-    //             return 0
-    //           }
-    //         })
-    //       }
-
-    //       if (itemsPerPage > 0) {
-    //         items = items.slice((page - 1) * itemsPerPage, page * itemsPerPage)
-    //       }
-
-    //       setTimeout(() => {
-    //         this.loading = false
-    //         resolve({
-    //           items,
-    //           total,
-    //         })
-    //       }, 1000)
-    //     })
-    //   },
-    //   getDesserts () {
-    //     return [
-    //       {
-    //         name: 'Frozen Yogurt',
-    //         calories: 159,
-    //         fat: 6.0,
-    //         carbs: 24,
-    //         protein: 4.0,
-    //         iron: '1%',
-    //       },
-    //       {
-    //         name: 'Ice cream sandwich',
-    //         calories: 237,
-    //         fat: 9.0,
-    //         carbs: 37,
-    //         protein: 4.3,
-    //         iron: '1%',
-    //       },
-    //       {
-    //         name: 'Eclair',
-    //         calories: 262,
-    //         fat: 16.0,
-    //         carbs: 23,
-    //         protein: 6.0,
-    //         iron: '7%',
-    //       },
-    //       {
-    //         name: 'Cupcake',
-    //         calories: 305,
-    //         fat: 3.7,
-    //         carbs: 67,
-    //         protein: 4.3,
-    //         iron: '8%',
-    //       },
-    //       {
-    //         name: 'Gingerbread',
-    //         calories: 356,
-    //         fat: 16.0,
-    //         carbs: 49,
-    //         protein: 3.9,
-    //         iron: '16%',
-    //       },
-    //       {
-    //         name: 'Jelly bean',
-    //         calories: 375,
-    //         fat: 0.0,
-    //         carbs: 94,
-    //         protein: 0.0,
-    //         iron: '0%',
-    //       },
-    //       {
-    //         name: 'Lollipop',
-    //         calories: 392,
-    //         fat: 0.2,
-    //         carbs: 98,
-    //         protein: 0,
-    //         iron: '2%',
-    //       },
-    //       {
-    //         name: 'Honeycomb',
-    //         calories: 408,
-    //         fat: 3.2,
-    //         carbs: 87,
-    //         protein: 6.5,
-    //         iron: '45%',
-    //       },
-    //       {
-    //         name: 'Donut',
-    //         calories: 452,
-    //         fat: 25.0,
-    //         carbs: 51,
-    //         protein: 4.9,
-    //         iron: '22%',
-    //       },
-    //       {
-    //         name: 'KitKat',
-    //         calories: 518,
-    //         fat: 26.0,
-    //         carbs: 65,
-    //         protein: 7,
-    //         iron: '6%',
-    //       },
-    //     ]
-    //   },
-    // },
+      // }
+    },
+    async mounted() {
+      await this.getAllUsers();
+    }
   }
 </script>
