@@ -30,7 +30,7 @@
                   </v-card>
                 </v-sheet>
                 <v-sheet v-show="currentTab === 'tab-gennemførte'">
-                  <v-card min-height="93px" :img="hardcodedImg" v-for="(n, index) in userCompAreas" :key="index">
+                  <v-card min-height="93px" class="mb-6" :img="hardcodedImg" v-for="(n, index) in userCompAreas" :key="index" @click="getSingleArea(n.area._id); backToMineOmraader();">
                     <v-card-title class="py-2">{{ n.area.title }}</v-card-title>
                   </v-card>
                 </v-sheet>
@@ -104,7 +104,7 @@
                   </v-col>
                 </v-row>
 
-                <v-btn fab height="32" width="32" @click="addTrashBag(); calculateTrashIntoGram();" elevation="0" color="grey lighten-2">
+                <v-btn fab height="32" width="32" @click="addTrashBag();" elevation="0" color="grey lighten-2">
                   <v-icon>mdi-plus</v-icon>
                 </v-btn>
               </v-container>
@@ -117,6 +117,7 @@
                 placeholder="Eks. '30% af området var utilgængeligt pga. private ejendomme...'"
                 outlined
                 label="Valgfrit"
+                v-model="completeAreaComment"
               ></v-textarea>
             </v-stepper-content>
           </v-stepper>
@@ -147,7 +148,7 @@
         </template>
         <v-container>
           <v-row>
-            <v-col cols="12" align="center">
+            <v-col cols="12" align="center" v-if="chosenSingleArea.areaCompleted == false">
               <div class="single-area_btns">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
@@ -305,9 +306,9 @@ export default {
     trashDialog: false,
 
     amountOfTrashBags: 1,
-    areaDetails: {
-      trash: null,
-    },
+    // areaDetails: {
+    //   trash: null,
+    // },
     selectedBag: {name: 'Vælg en posetype'},
     bagtypes: [
       {name: 'Lille pose'},
@@ -316,6 +317,7 @@ export default {
     ],
     bagFilledPercentage: '',
     calculatedGram: Number,
+    completeAreaComment: '',
 
     snackbar: false,
     snackbarTitle: '',
@@ -339,13 +341,18 @@ export default {
           src: 'backgrounds/md2.jpg',
         },
       ],
-      selected: [],
+      // selected: [],
       isDropdownActive: false,
       showSocialMedia: false
 
   }),
   components: {
     'dropdown': dropdown
+  },
+  watch: {
+    showSingleArea: function() {
+      EventBus.$emit('show-single-area', this.showSingleArea);
+    }
   },
   methods: {
     getUser() {
@@ -398,6 +405,7 @@ export default {
         }
       }).then((response) => {
         console.log(response);
+        this.resetTrash();
       }).catch((error) => {
         console.log(error);
       });
@@ -423,10 +431,12 @@ export default {
         console.log(error);
       });
     },
-    completeArea() {
+    async completeArea() {
+      await this.calculateTrashIntoGram();
       let areaId = this.chosenSingleArea._id;
       let area = [
-        {propName: "areaCompleted", value: true}
+        {propName: "areaCompleted", value: true},
+        {propName: "areaDetails.trash", value: this.calculatedGram}
       ];
 
       if(areaId !== null) {
@@ -472,8 +482,8 @@ export default {
       return n.toLocaleString();
     },
     backToMineOmraader() {
-      this.redirectToMineOmraader = !this.redirectToMineOmraader;
-      EventBus.$emit('back-to-mine-omraader', this.redirectToMineOmraader);
+      // this.redirectToMineOmraader = !this.redirectToMineOmraader;
+      // EventBus.$emit('back-to-mine-omraader', this.redirectToMineOmraader);
     },
     startSnackbar() {
       this.snackbarTitle = 'Område startet!';
@@ -504,10 +514,16 @@ export default {
       //   this.amountOfTrashBags--;
       // }
     },
+    resetTrash() {
+      this.bagFilledPercentage = '';
+      this.selectedBag.name = 'Vælg en posetype';
+      this.calculatedGram = Number;
+      this.completeAreaComment = '';
+    },
     showSocialMediaDialog() {
       this.showSocialMedia = true;
     },
-    calculateTrashIntoGram() {
+    async calculateTrashIntoGram() {
       let gram = 0;
       let num = 0;
       if (this.selectedBag.name != 'Vælg en posetype' && this.bagFilledPercentage != '') {
@@ -525,6 +541,10 @@ export default {
   },
   mounted() {
     this.getUser();
+    EventBus.$on('back-to-mine-omraader', backToMineOmraader => {
+      this.showSingleArea = backToMineOmraader;
+      console.log('from mine', this.showSingleArea);
+    });
   }
 };
 </script>

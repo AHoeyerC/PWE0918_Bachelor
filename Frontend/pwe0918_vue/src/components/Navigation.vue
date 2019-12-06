@@ -32,7 +32,7 @@
             <v-container>
               <v-row>
                 <v-col cols="12" align="center">
-                  <v-btn fab color="red" @click="overlayMineOmraader = false" fixed bottom style="margin-left: -28px;">X</v-btn>
+                  <v-btn fab color="red" @click="isSingleAreaShowing ? redirectToMineOmraader() : overlayMineOmraader = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
                 </v-col>
               </v-row>
             </v-container>
@@ -48,13 +48,13 @@
           v-if="showLeaderboard"
           >
           </Leaderboard>
-          <v-btn
-            fab
-            color="red"
-           @click="overlayLeaderboard = false"
-          >
-            X
-          </v-btn>
+          <v-container>
+              <v-row>
+                <v-col cols="12" align="center">
+                  <v-btn fab color="red" @click="overlayLeaderboard = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
         </v-overlay>
         <v-overlay
             :opacity="1"
@@ -133,7 +133,8 @@ export default {
       showMenu: false,
 
       showStartOmraade: false,
-      backToMineOmraader: false
+      backToMineOmraader: false,
+      isSingleAreaShowing: false
   }),
   methods: {
     fetchStart () {
@@ -149,10 +150,14 @@ export default {
     fetchTrofae () {
       this.showTrofae = !this.showTrofae;
     },
+    redirectToMineOmraader() {
+      EventBus.$emit('back-to-mine-omraader', this.backToMineOmraader);
+      console.log('from nav', this.backToMineOmraader);
+    }
   },
   mounted() {
-    EventBus.$on('back-to-mine-omraader', redirectToMineOmraader => {
-      this.backToMineOmraader = redirectToMineOmraader;
+    EventBus.$on('show-single-area', showSingleArea => {
+      this.isSingleAreaShowing = showSingleArea;
     });
   }
 };
