@@ -12,7 +12,13 @@ router.post('/signup', UserController.user_signup);
 
 router.post('/login', UserController.user_login);
 
+router.post('/completeArea/:userId', UserController.user_complete_area);
+
 router.post('/addArea/:userId', UserController.user_add_area);
+
+router.patch('/removeArea/:userId', UserController.user_remove_area);
+
+router.patch('/removeCompletedArea/:userId', UserController.user_remove_completed_area);
 
 router.patch('/:userId', UserController.user_update_user);
 

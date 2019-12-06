@@ -57,10 +57,34 @@
         </v-card>
       </v-overlay>
 
+      <v-overlay v-if="showSocialMedia">
+        <v-card light>
+          <v-card-title class="py-2">Del på sociale medier</v-card-title>
+          <v-divider></v-divider>
+          <v-container class="py-0">
+            <v-row>
+              <v-col cols="6" align="center" class="pb-0">
+                <v-img src="../../public/img/icons/f_logo.png" height="56" width="56"></v-img>
+              </v-col>
+              <v-col cols="6" class="pb-0">
+                <v-img src="../../public/img/icons/i_logo.png" height="56" width="56"></v-img>
+              </v-col>
+            </v-row>
+          </v-container>
+          <v-container>
+            <v-row>
+              <v-col cols="12" align="end">
+                <v-btn color="error" @click="showSocialMedia = false;">Afslut</v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+      </v-overlay>
+
       <v-overlay v-if="showCompletedAreaStepper">
         <v-card light width="400"> <!--width="300px" height="320px"-->
 
-          <v-stepper v-model="stepper" :vertical="stepperVertical" class="pb-0 mb-6">
+          <v-stepper v-model="stepper" :vertical="stepperVertical" class="pb-12 mb-6">
             <v-stepper-step :complete="stepper > 1" step="1">Hvor meget affald samlede du?</v-stepper-step>
             <v-stepper-content step="1" :class="stepper == 1 ? 'allow-overflow' : ''">
               <v-container class="py-0">
@@ -70,7 +94,7 @@
                     <dropdown :options="bagtypes" :placeholder="'Vælg en pose'" :selected="selectedBag" v-on:updateOption="dropdownOnSelect"></dropdown>
                   </v-col>
                   <v-col cols="6" class="pr-0 py-0">
-                    <v-text-field class="pt-0" label="Hvor fyldt? %"> <!--append-icon="mdi mdi-percent"-->
+                    <v-text-field class="pt-0" label="Hvor fyldt? %" v-model="bagFilledPercentage" type="number">
                       <template slot="append-outer">
                         <v-btn fab height="28" width="28" elevation="0" color="grey lighten-2" @click="removeTrashBag();">
                           <v-icon>mdi-minus</v-icon>
@@ -80,7 +104,7 @@
                   </v-col>
                 </v-row>
 
-                <v-btn fab height="32" width="32" @click="addTrashBag();" elevation="0" color="grey lighten-2">
+                <v-btn fab height="32" width="32" @click="addTrashBag(); calculateTrashIntoGram();" elevation="0" color="grey lighten-2">
                   <v-icon>mdi-plus</v-icon>
                 </v-btn>
               </v-container>
@@ -94,10 +118,6 @@
                 outlined
                 label="Valgfrit"
               ></v-textarea>
-            </v-stepper-content>
-            
-            <v-stepper-step :complete="stepper > 3" step="3">Opret</v-stepper-step>
-            <v-stepper-content step="3">
             </v-stepper-content>
           </v-stepper>
 
@@ -294,6 +314,8 @@ export default {
       {name: 'Mellemstor pose'},
       {name: 'Stor pose'}
     ],
+    bagFilledPercentage: '',
+    calculatedGram: Number,
 
     snackbar: false,
     snackbarTitle: '',
@@ -319,7 +341,8 @@ export default {
       ],
       selected: [],
       isDropdownActive: false,
-      selectedBagArray: []
+      showSocialMedia: false
+
   }),
   components: {
     'dropdown': dropdown
@@ -359,24 +382,83 @@ export default {
         console.log(error);
       });
     },
+    removeFromIncompleteAreas() {
+      let userId = localStorage.getItem('userId');
+      let aId = this.chosenSingleArea._id;
+      let area = {
+        areaId: aId
+      };
+      axios({
+        method: 'patch',
+        url: this.baseUrl + 'user/removeArea/' + userId,
+        data: area,
+        withCredentials: false,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
+    addToCompletedAreas() {
+      let userId = localStorage.getItem('userId');
+      let aId = this.chosenSingleArea._id;
+      let area = {
+        areaId: aId
+      };
+      axios({
+        method: 'post',
+        url: this.baseUrl + 'user/completeArea/' + userId,
+        data: area,
+        withCredentials: false,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((response) => {
+        console.log(response);
+        this.removeFromIncompleteAreas();
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
+    completeArea() {
+      let areaId = this.chosenSingleArea._id;
+      let area = [
+        {propName: "areaCompleted", value: true}
+      ];
+
+      if(areaId !== null) {
+        axios({
+          method: 'patch',
+          url: this.baseUrl + 'areas/' + areaId,
+          data: area,
+          withCredentials: false,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then((response) => {
+          console.log(response);
+          this.addToCompletedAreas();
+        }).catch((error) => {
+          console.log(error);
+        });
+      }
+    },
     nextStep() {
       if (this.stepper === 1) {
         this.stepper++;
       } else if (this.stepper === 2) {
-        this.stepper++;
-      } else if (this.stepper === 3) {
         this.showCompletedAreaStepper = false;
         this.stepper = 1;
+        this.completeArea();
         this.completeSnackbar();
+        this.showSocialMediaDialog();
       }
     },
-    test() {
-      console.log(this.posetyper);
-    },
     prevStep() {
-      if (this.stepper === 3) {
-        this.stepper--;
-      } else if (this.stepper === 2) {
+      if (this.stepper === 2) {
         this.stepper--;
       } else if (this.stepper === 1) {
         this.showCompletedAreaStepper = false;
@@ -421,6 +503,24 @@ export default {
       // if (this.amountOfTrashBags != 1) {
       //   this.amountOfTrashBags--;
       // }
+    },
+    showSocialMediaDialog() {
+      this.showSocialMedia = true;
+    },
+    calculateTrashIntoGram() {
+      let gram = 0;
+      let num = 0;
+      if (this.selectedBag.name != 'Vælg en posetype' && this.bagFilledPercentage != '') {
+        if (this.selectedBag.name == 'Lille pose') {
+          gram = 1000;
+        } else if (this.selectedBag.name == 'Mellemstor pose') {
+          gram = 5000;
+        } else {
+          gram = 10000;
+        }
+        num = parseInt(this.bagFilledPercentage);
+        this.calculatedGram = gram / 100 * num;
+      }
     }
   },
   mounted() {
