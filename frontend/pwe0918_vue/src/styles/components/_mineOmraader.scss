@@ -1,0 +1,63 @@
+@import 'styles/utilities/variables.scss';
+
+.header-grey {
+    background-color: #F5F5F5;
+}
+.theme--light {
+    &.v-sheet {
+        &.header-grey {
+            background-color: #F5F5F5;
+            font-size: $h5;
+        }
+    }
+}
+.area-title {
+    user-select: none;
+}
+.v-responsive {
+    &.single-area_img {
+        overflow: visible;
+        button:first-child {
+            margin-left: -20px;
+        }
+        button:last-child {
+            margin-right: -20px;
+        }
+    }
+}
+.single-area_btns {
+    width: 120px; 
+    height: 300px; 
+    position: relative; 
+    margin-top: -24px;
+}
+.snackbar-text {
+    color: #000000;
+}
+.theme--light {
+    &.v-card > .v-card__text {
+        &.snackbar-text {
+            color: #000000;
+        }
+    }
+}
+.allow-overflow {
+    .v-stepper__wrapper {
+        overflow: visible !important;
+    }
+}
+.dropdown-toggle {
+    padding-bottom: 6px !important;
+}
+.btn-group {
+    margin: -2px 1px !important;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+// .v-stepper__wrapper {
+//     overflow: visible !important;
+// }

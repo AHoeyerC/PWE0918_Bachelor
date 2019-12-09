@@ -7,6 +7,7 @@ const User = require('../models/user');
 
 exports.user_get_all = (req, res, next) => {
     User.find()
+    .select('-__v -password')
     .exec()
     .then(users => {
         const response = {
@@ -111,9 +112,128 @@ exports.user_login = (req, res, next) => {
     });
 };
 
+exports.user_complete_area = (req, res, next) => {
+    User.findOneAndUpdate(
+        {_id: req.params.userId},
+        {$push: {"userData.completedAreas": { area: req.body.areaId }}},
+        {safe: true, upsert: true}
+    ).exec()
+    .then(user => {
+        console.log("Completed area", user);
+        if (user) {
+            res.status(200).json({
+                message: 'Successfully completed area',
+                request: {
+                    type: 'POST',
+                    url: 'http://localhost:8626/user/' + user._id
+                }
+            });
+        } else {
+            res.status(404).json({message: "Could not complete area"});
+        }
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
+};
+
+exports.user_add_area = (req, res, next) => {
+    User.findOneAndUpdate(
+        {_id: req.params.userId},
+        {$push: {"userData.incompleteAreas": { area: req.body.areaId }}},
+        {safe: true, upsert: true}
+    ).exec()
+    .then(user => {
+        console.log("Added area to user", user);
+        if (user) {
+            res.status(200).json({
+                message: 'Successfully added area to user',
+                request: {
+                    type: 'POST',
+                    url: 'http://localhost:8626/user/' + user._id
+                }
+            });
+        } else {
+            res.status(404).json({message: "Could not add area to user"});
+        }
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
+};
+
+exports.user_remove_area = (req, res, next) => {
+    User.findOneAndUpdate(
+        {_id: req.params.userId},
+        {$pull: {"userData.incompleteAreas": { area: req.body.areaId }}},
+        {safe: true, upsert: true}
+        ).exec()
+        .then(user => {
+            console.log("Removes area from incompleteAreas", user);
+            if (user) {
+                res.status(200).json({
+                    message: 'Succesfully removed area from incompleteAreas',
+                    request: {
+                        type: 'PATCH',
+                        url: 'http://localhost:8626/user/' + user._id
+                    }
+                });
+            } else {
+                res.status(404).json({message: "Could not remove area from user"});
+            }
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+};
+
+exports.user_remove_completed_area = (req, res, next) => {
+    User.findOneAndUpdate(
+        {_id: req.params.userId},
+        {$pull: {"userData.completedAreas": { area: req.body.areaId }}},
+        {safe: true, upsert: true}
+        ).exec()
+        .then(user => {
+            console.log("Removes area from completedAreas", user);
+            if (user) {
+                res.status(200).json({
+                    message: 'Succesfully removed area from completedAreas',
+                    request: {
+                        type: 'PATCH',
+                        url: 'http://localhost:8626/user/' + user._id
+                    }
+                });
+            } else {
+                res.status(404).json({message: "Could not remove completed area from user"});
+            }
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+};
+
 exports.user_get_user = (req, res, next) => {
     const id = req.params.userId;
     User.findById(id)
+    .select('-__v -password')
+    .populate({
+        path: 'userData.incompleteAreas.area',
+        select: 'title areaCompleted areaStartDate areaStartTime areaDetails',
+        model: 'Area'
+    })
+    .populate({
+        path: 'userData.completedAreas.area',
+        select: 'title areaCompleted areaStartDate areaStartTime areaDetails',
+        model: 'Area'
+    })
     .exec()
     .then(user => {
         console.log(user);

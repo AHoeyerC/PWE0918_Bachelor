@@ -178,6 +178,7 @@ import * as L from "leaflet";
 import 'leaflet.locatecontrol';
 import axios from 'axios';
 import 'leaflet-draw';
+import { EventBus } from '../event-bus';
 
 export default {
   name: "Map",
@@ -212,12 +213,14 @@ export default {
 
     stepper: 1,
     stepperVertical: true,
-    showStepper: true,
+    showStepper: false,
     justify: 'center',
     alignment: 'end',
 
     showDatePicker: false,
-    showTimePicker: false
+    showTimePicker: false,
+
+    eventBusTestCount: 0
   }),
   methods: {
     fetchSettings () {
@@ -260,16 +263,19 @@ export default {
       // console.log(polygon);
       //hardcoded popupbind
       polygon.bindPopup(`This area was completed by ${this.hardcodedUser.firstName}!`);
+      // this.map.fitBounds(polygon.getBounds()); //til mine områder
 
       //Reverses the order since GeoJSON saves as LngLat, but Leaflet uses LatLng
       let mappedArray = [];
-      this.hardcodedArea.areaLocationData.coordinates.forEach(element => {
-        element.forEach(coord => {
-          mappedArray.push(coord.reverse());
+      if (this.hardcodedArea != null) {
+        this.hardcodedArea.areaLocationData.coordinates.forEach(element => {
+          element.forEach(coord => {
+            mappedArray.push(coord.reverse());
+          });
         });
-      });
-      L.polygon(mappedArray).addTo(this.map);
-      console.log("mapped", mappedArray);
+        console.log("mapped", mappedArray);
+        L.polygon(mappedArray).addTo(this.map); //may need to be put somewhere else, i dun goofed
+      }
 
 
       //Leaflet.draw
@@ -313,12 +319,13 @@ export default {
       this.map.on('draw:created', function(e) {
         areaCoords = e.layer;
         self.selectedAreaCoords.coordinates = areaCoords.toGeoJSON().geometry.coordinates;
+        self.selectedAreaCoords.coordinates[0].pop(); //removes the last 'closing' coordinate that is the same as coord 1
+        console.log("selectedCoords ", self.selectedAreaCoords.coordinates);
 
         // let mappedAreaCoords = []; 
         // areaCoords.toGeoJSON().geometry.coordinates.map(x => mappedAreaCoords.push(x));
         // console.log('mapped:', mappedAreaCoords);
 
-        console.log("selectedCoords ", self.selectedAreaCoords.coordinates);
         self.showStepper = true;
       })
     },
@@ -358,11 +365,12 @@ export default {
         withCredentials: false
       }).then((response) => {
         console.log("GET ALL: ", response); 
-        let mappedData = [];
+
         response.data.areas.forEach(area => {
+          let mappedData = [];
           // console.log('foreach area', area);
           area.areaLocationData.coordinates.forEach(el => {
-          // console.log('foreach el', el);
+            // console.log('foreach el', el);
             el.forEach(coord => {
               // console.log('foreach coord', coord);
               mappedData.push(coord.reverse());
@@ -371,6 +379,8 @@ export default {
           });
           L.polygon(mappedData).addTo(this.map);
         });
+
+        // console.log(this.map);
       }).catch((error) => {
         console.log(error); 
       });
@@ -380,7 +390,7 @@ export default {
       try {
         const res = await axios({
           method: 'get',
-          url: this.baseUrl + 'areas/5de410604984104b20738222',
+          url: this.baseUrl + 'areas/5de4eaf25a0af05be0e7aa7',
           headers: {
             'Content-Type': 'application/json'
           },
@@ -414,9 +424,26 @@ export default {
         withCredentials: false
       }).then((response) => {
         console.log(response);
+        this.addAreaToUser(userId, response.data.createdArea._id); //forwards the userId from localstorage and the newly created areaId to the 'addAreaToUser' method
       }).catch((error) => {
         console.log(error);
       });
+    },
+
+    addAreaToUser(userId, aId) {
+      let area = {
+        areaId: aId
+      };
+      axios({
+        method: 'post',
+        url: this.baseUrl + 'user/addArea/' + userId,
+        data: area,
+        withCredentials: false
+      }).then((response) => {
+        console.log("addAreaToUser:", response);
+      }).catch((error) => {
+        console.log(error);
+      })
     },
 
     async getUser() {
@@ -439,11 +466,16 @@ export default {
 
   async mounted() {
     await this.getUser(); //await da mounted() ellers ville køre asynkront og dataen fra getUser() først ville komme ind efter den skulle bruges
-    await this.getArea();
+    // await this.getArea();
     this.initMap();
     this.getMapCoordsOnClick();
     console.log("Hardcoded user: ", this.hardcodedUser);
     this.getAllAreas();
+
+    //start an area
+    EventBus.$on('start-area', showStartOmraade => {
+      this.showStepper = showStartOmraade;
+    });
   }
 };
 </script>

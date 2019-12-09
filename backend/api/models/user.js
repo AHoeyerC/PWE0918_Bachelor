@@ -23,9 +23,9 @@ const userSchema = mongoose.Schema({
         incompleteAreas: [{
             area: { type: mongoose.Schema.Types.ObjectId, ref: 'Area', required: true }
         }],
-        totalSqMeters: { type: Number },
-        totalSteps: { type: Number },
-        totalTrashInGram: { type: Number },
+        totalSqMeters: { type: Number, default: 0 },
+        totalSteps: { type: Number, default: 0 },
+        totalTrashInGram: { type: Number, default: 0 },
         trophies: [{
             trophy: { type: mongoose.Schema.Types.ObjectId, ref: 'Trophy', required: true },
             dateObtained: { type: Date, default: Date.now }
