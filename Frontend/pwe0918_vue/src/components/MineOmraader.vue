@@ -1,13 +1,5 @@
 <template>
   <v-sheet width="95vw" height="90vh" light>
-    <!-- <v-container id="dropdown-example-1">
-      <v-overflow-btn
-        class="my-2"
-        :items="posetyper"
-        label="Overflow Btn"
-        target="#dropdown-example-1"
-      ></v-overflow-btn>
-    </v-container>   -->
     <v-sheet v-if="!showSingleArea">
       <v-container fluid class="header-grey py-1">
         <v-row>
@@ -25,12 +17,12 @@
             <v-row>
               <v-col cols="12">
                 <v-sheet v-show="currentTab === 'tab-aktive'">
-                  <v-card min-height="93px" class="mb-6" :img="hardcodedImg" v-for="(n, index) in userIncAreas" :key="index" @click="getSingleArea(n.area._id); backToMineOmraader();"> <!--skal have en 'to' prop for routing til området-->
+                  <v-card min-height="93px" class="mb-6" :img="hardcodedImg" v-for="(n, index) in userIncAreas" :key="index" @click="getSingleArea(n.area._id); ">
                     <v-card-title class="py-2 area-title">{{ n.area.title }}</v-card-title>
                   </v-card>
                 </v-sheet>
                 <v-sheet v-show="currentTab === 'tab-gennemførte'">
-                  <v-card min-height="93px" class="mb-6" :img="hardcodedImg" v-for="(n, index) in userCompAreas" :key="index" @click="getSingleArea(n.area._id); backToMineOmraader();">
+                  <v-card min-height="93px" class="mb-6" :img="hardcodedImg" v-for="(n, index) in userCompAreas" :key="index" @click="getSingleArea(n.area._id); ">
                     <v-card-title class="py-2">{{ n.area.title }}</v-card-title>
                   </v-card>
                 </v-sheet>
@@ -306,9 +298,6 @@ export default {
     trashDialog: false,
 
     amountOfTrashBags: 1,
-    // areaDetails: {
-    //   trash: null,
-    // },
     selectedBag: {name: 'Vælg en posetype'},
     bagtypes: [
       {name: 'Lille pose'},
@@ -341,7 +330,6 @@ export default {
           src: 'backgrounds/md2.jpg',
         },
       ],
-      // selected: [],
       isDropdownActive: false,
       showSocialMedia: false
 
@@ -431,12 +419,57 @@ export default {
         console.log(error);
       });
     },
+    addDataToUser() {
+      let userId = localStorage.getItem('userId');
+      let areaData = [
+        {propName: "userData.totalSteps", value: 0}, //later
+        {propName: "userData.totalSqMeters", value: 0}, //later
+        {propName: "userData.totalTrashInGram", value: this.calculatedGram}
+      ];
+      axios({
+        method: 'patch',
+        url: this.baseUrl + 'user/total/' + userId,
+        data: areaData,
+        withCredentials : false,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
+    addDataToAggregate() {
+      const daId = '5dcc3b981928dc2040edf43f';
+      let areaData = [
+        {propName: "steps", value: 0}, //later when/if steps are implemented
+        {propName: "trashInGram", value: this.calculatedGram},
+        {propName: "squareMeters", value: 0}, //later when/if steps are implemented
+        {propName: "completedAreas", value: 1} //always inc by 1
+      ];
+      axios({
+        method: 'patch',
+        url: this.baseUrl + 'dataAggregate/' + daId,
+        data: areaData,
+        withCredentials: false,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
     async completeArea() {
       await this.calculateTrashIntoGram();
       let areaId = this.chosenSingleArea._id;
       let area = [
         {propName: "areaCompleted", value: true},
-        {propName: "areaDetails.trash", value: this.calculatedGram}
+        {propName: "areaDetails.trash", value: this.calculatedGram},
+        {propName: "areaDetails.steps", value: 0}, //later
+        {propName: "areaDetails.squareMeters", value: 0} //later
       ];
 
       if(areaId !== null) {
@@ -451,6 +484,8 @@ export default {
         }).then((response) => {
           console.log(response);
           this.addToCompletedAreas();
+          this.addDataToUser();
+          this.addDataToAggregate();
         }).catch((error) => {
           console.log(error);
         });
@@ -480,10 +515,6 @@ export default {
       var offset = (new Date().getTimezoneOffset() / 60) * -1;
       var n = new Date(d.getTime() + offset);
       return n.toLocaleString();
-    },
-    backToMineOmraader() {
-      // this.redirectToMineOmraader = !this.redirectToMineOmraader;
-      // EventBus.$emit('back-to-mine-omraader', this.redirectToMineOmraader);
     },
     startSnackbar() {
       this.snackbarTitle = 'Område startet!';
@@ -543,7 +574,6 @@ export default {
     this.getUser();
     EventBus.$on('back-to-mine-omraader', backToMineOmraader => {
       this.showSingleArea = backToMineOmraader;
-      console.log('from mine', this.showSingleArea);
     });
   }
 };

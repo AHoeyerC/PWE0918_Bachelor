@@ -97,7 +97,6 @@ export default {
   name: "Navigation",
 
   components: {
-    // StartOmraade,
     MineOmraader,
     Leaderboard,
     Trofaer
@@ -135,7 +134,6 @@ export default {
     },
     redirectToMineOmraader() {
       EventBus.$emit('back-to-mine-omraader', this.backToMineOmraader);
-      console.log('from nav', this.backToMineOmraader);
     }
   },
   mounted() {

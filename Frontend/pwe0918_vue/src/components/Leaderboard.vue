@@ -30,28 +30,32 @@
           <v-row>
             <v-col cols="12">
               <v-sheet v-show="currentTab === 'tab-uge'">
-                <v-btn @click="changeSort">change sort</v-btn> current sort: {{ defaultSort }}
                 <v-list>
                   <v-list-item-group>
                     <v-list-item color="success" disabled> <!--Header-->
                       <v-container fluid class="py-0">
                         <v-row>
-                          <v-col cols="2" class="py-0">
+                          <v-col cols="1" class="py-0">
                             <v-list-item-content>
                               <v-list-item-title>Rank</v-list-item-title>
                             </v-list-item-content>
                           </v-col>
-                          <v-col cols="3" class="py-0">
+                          <v-col cols="5" class="py-0">
                             <v-list-item-content>
-                              <v-list-item-title>Antal m2</v-list-item-title>
+                              <v-list-item-title>Brugernavn</v-list-item-title>
                             </v-list-item-content>
                           </v-col>
-                          <v-col cols="4" class="py-0">
+                          <v-col cols="2" class="py-0" align="end">
+                            <v-list-item-content>
+                              <v-list-item-title>Område dækket</v-list-item-title>
+                            </v-list-item-content>
+                          </v-col>
+                          <v-col cols="2" class="py-0" align="end">
                             <v-list-item-content>
                               <v-list-item-title>Skridt</v-list-item-title>
                             </v-list-item-content>
                           </v-col>
-                          <v-col cols="3" class="py-0" align="end">
+                          <v-col cols="2" class="py-0" align="end">
                             <v-list-item-content>
                               <v-list-item-title>Affald</v-list-item-title>
                             </v-list-item-content>
@@ -59,27 +63,32 @@
                         </v-row>
                       </v-container>
                     </v-list-item>
-                    <v-list-item v-for="(user, index) in todos" :key="user._id">
+                    <v-list-item v-for="(user, index) in sortedUsers" :key="user._id">
                       <v-container fluid class="py-0">
                         <v-row>
-                          <v-col cols="2" class="py-0">
+                          <v-col cols="1" class="py-0">
                             <v-list-item-content>
                               <v-list-item-title>{{ index+1 }}</v-list-item-title>
                             </v-list-item-content>
                           </v-col>
-                          <v-col cols="3" class="py-0">
+                          <v-col cols="5" class="py-0">
                             <v-list-item-content>
-                              <v-list-item-title>{{ user.userData.totalSqMeters }}</v-list-item-title>
+                              <v-list-item-title>{{ user.username }}</v-list-item-title>
                             </v-list-item-content>
                           </v-col>
-                          <v-col cols="4" class="py-0">
+                          <v-col cols="2" class="py-0" align="end">
+                            <v-list-item-content>
+                              <v-list-item-title>{{ user.userData.totalSqMeters }} m<sup>2</sup></v-list-item-title>
+                            </v-list-item-content>
+                          </v-col>
+                          <v-col cols="2" class="py-0" align="end">
                             <v-list-item-content>
                               <v-list-item-title>{{ user.userData.totalSteps }}</v-list-item-title>
                             </v-list-item-content>
                           </v-col>
-                          <v-col cols="3" class="py-0" align="end">
+                          <v-col cols="2" class="py-0" align="end">
                             <v-list-item-content>
-                              <v-list-item-title>{{ user.userData.totalTrashInGram }}</v-list-item-title>
+                              <v-list-item-title>{{ user.userData.totalTrashInGram }} g</v-list-item-title>
                             </v-list-item-content>
                           </v-col>
                         </v-row>
@@ -108,7 +117,7 @@ import axios from 'axios';
     name: "Leaderboard",
     data () {
       return {
-        filters: ['Skridt', 'Affald', 'Antal områder'],
+        filters: ['Skridt', 'Affald', 'Område dækket'],
         activeFilter: 'Skridt',
 
         tabs: [ 'uge', 'måned', 'altid' ],
@@ -116,10 +125,6 @@ import axios from 'axios';
 
         sortBySteps: true,
         sortByTrash: false,
-        defaultSort: 'steps',
-        steps: 0,
-        trash: 0,
-        sqMeters: 0,
 
         baseUrl: 'http://localhost:8626/',
         allUsers: [],
@@ -157,38 +162,12 @@ import axios from 'axios';
           this.sortBySteps = false;
           this.sortByTrash = false;
         }
-        // this.sortBySteps = !this.sortBySteps;
-        // if (this.sortBySteps) {
-        //   this.sort = 'steps';
-        // } else if (this.sortByTrash) {
-        //   this.sort = 'trash';
-        // } else {
-        //   this.sort = 'sqMeters';
-        // }
       }
     },
     computed: {
-      todos() {
+      sortedUsers() {
         let result = this.allUsers;
-        // let result = [
-        //   { id:1, text: "Learn JavaScript", show: true, price: 100, duration: 2 },
-        //   { id:2, text: "Learn Vue", show: true, price: 200, duration: 1 },
-        //   { id:3, text: "Play around in JSFiddle", show: true, price: 500, duration: 5 },
-        //   { id:4, text: "Build something awesome", show: true, price: 550, duration: 4 }
-        // ];
-        // result = result.filter(todo => todo.price >= this.price);
-        result = result.filter(user => user.userData.totalSteps >= this.steps);
-
-        // if(this.sortByPrice) {
-        //   return result.sort(function(a, b) {
-        //     return b.price - a.price;
-        //   });
-        // } else {
-        //   return result.sort(function(a, b) {
-        //     return a.duration - b.duration;
-        //   });
-        // }
-
+        
         if(this.sortBySteps) {
           return result.sort(function(a,b) {
             return b.userData.totalSteps - a.userData.totalSteps;

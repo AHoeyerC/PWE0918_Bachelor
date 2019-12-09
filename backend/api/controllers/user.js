@@ -239,6 +239,10 @@ exports.user_get_user = (req, res, next) => {
         console.log(user);
         if (user) {
             res.status(200).json({
+                count:{
+                    compAreas: user.userData.completedAreas.length,
+                    incAreas: user.userData.incompleteAreas.length,
+                },
                 user: user,
                 request: {
                     type: 'GET',
@@ -270,6 +274,31 @@ exports.user_update_user = (req, res, next) => {
     .then(result => {
         res.status(200).json({
             message: 'User updated',
+            request: {
+                type: 'GET',
+                url: 'http://localhost:8626/user/' + id
+            }
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    });
+};
+
+exports.user_update_totals = (req, res, next) => {
+    const id = req.params.userId;
+    const updateOps = {};
+    for (const ops of req.body) {
+        updateOps[ops.propName] = ops.value;
+    }
+    User.updateOne({_id: id}, { $inc: updateOps })
+    .exec()
+    .then(result => {
+        res.status(200).json({
+            message: 'User totals updated',
             request: {
                 type: 'GET',
                 url: 'http://localhost:8626/user/' + id

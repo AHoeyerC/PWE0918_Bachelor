@@ -22,6 +22,8 @@ router.patch('/removeCompletedArea/:userId', UserController.user_remove_complete
 
 router.patch('/:userId', UserController.user_update_user);
 
+router.patch('/total/:userId', UserController.user_update_totals);
+
 router.delete('/:userId', UserController.user_delete_user); //checkAuth, 
 
 module.exports = router;
