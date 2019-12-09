@@ -2,8 +2,8 @@
   width: 150px;
   height: 150px;
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 41%;
+  top: 81%;
   margin: 75px 0 0 75px;
   list-style: none;
   font-size: 200%;
@@ -55,11 +55,6 @@
   transition: .5s;
 }
 
-.menu-item:hover {
-  opacity: 0.5;
-  box-shadow: 0 5px 10px black;
-}
-
 .menu-item a {
   color: #fff;
   position: relative;
@@ -70,20 +65,20 @@
 
 #menu:target>.menu-item:nth-child(5) {
   transform: rotate(60deg) translateY(-150px) rotate(300deg);
-  transition-delay: 0s;
+  transition-delay: 0.3s;
 }
 
 #menu:target>.menu-item:nth-child(4) {
   transform: rotate(20deg) translateY(-155px) rotate(-20deg);
-  transition-delay: 0.1s;
+  transition-delay: 0.2s;
 }
 
 #menu:target>.menu-item:nth-child(3) {
   transform: rotate(-20deg) translateY(-155px) rotate(20deg);
-  transition-delay: 0.2s;
+  transition-delay: 0.1s;
 }
 
 #menu:target>.menu-item:nth-child(2) {
   transform: rotate(-60deg) translateY(-150px) rotate(60deg);
-  transition-delay: 0.3s;
+  transition-delay: 0s;
 }

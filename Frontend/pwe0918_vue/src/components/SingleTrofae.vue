@@ -1,8 +1,22 @@
 <template>
   <v-sheet
-    width="95vw" height="90vh"
+    width="45vw" height="48vh" light
   >
-    
+  <v-container>
+    <v-row>
+      <v-col>
+        <v-img src="https://picsum.photos/id/11/500/300"></v-img>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="py-0">
+        <v-card flat>
+          <v-card-title class="py-0">Første Trofæ</v-card-title>
+          <v-card-text>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aspernatur dolorem possimus facere minus fugit reprehenderit iste nesciunt facilis quo necessitatibus voluptatum officiis vero, corporis rerum aut veniam illum atque repellendus.</v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
   </v-sheet>
 </template>
 

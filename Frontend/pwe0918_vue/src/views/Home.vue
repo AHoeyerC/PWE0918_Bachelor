@@ -8,7 +8,6 @@
 <script>
   import Map from "../components/Map"
   import Navigation from "../components/Navigation"
-  // import NavWheel from "../components/NavWheel"
   
 
   export default {
@@ -17,12 +16,11 @@
   components: {
     Navigation,
     Map,
-    // NavWheel
     
   },
 
   data: () => ({
-    //
+    
   }),
 };
 </script>
