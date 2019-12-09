@@ -33,7 +33,7 @@
           <v-container>
               <v-row>
                 <v-col cols="12" align="center">
-                  <v-btn fab color="red" @click="overlayLeaderboard = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
+                  <v-btn fab color="red" @click="isDisplayUserShowing ? redirectToLeaderboard() : overlayLeaderboard = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
                 </v-col>
               </v-row>
             </v-container>
@@ -115,8 +115,12 @@ export default {
       showMenu: false,
 
       showStartOmraade: false,
+
       backToMineOmraader: false,
-      isSingleAreaShowing: false
+      isSingleAreaShowing: false,
+
+      backToLeaderboard: false,
+      isDisplayUserShowing: false
   }),
   methods: {
     fetchStart () {
@@ -134,11 +138,17 @@ export default {
     },
     redirectToMineOmraader() {
       EventBus.$emit('back-to-mine-omraader', this.backToMineOmraader);
+    },
+    redirectToLeaderboard() {
+      EventBus.$emit('back-to-leaderboard', this.backToLeaderboard);
     }
   },
   mounted() {
     EventBus.$on('show-single-area', showSingleArea => {
       this.isSingleAreaShowing = showSingleArea;
+    });
+    EventBus.$on('show-display-user', showDisplayUser => {
+      this.isDisplayUserShowing = showDisplayUser;
     });
   }
 };
