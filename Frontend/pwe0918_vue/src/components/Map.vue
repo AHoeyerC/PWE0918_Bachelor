@@ -1,5 +1,64 @@
 <template>
   <v-sheet>
+    <v-overlay
+      :opacity="1"
+      :absolute= false
+      :value="overlayHelp"
+      z-index="5000"
+      >        
+        <help
+          v-if="showHelp"
+        >
+        </help>
+        <v-btn
+          fab
+          color="red"
+          @click="overlayHelp = false"
+        >
+          X
+        </v-btn>
+      </v-overlay>
+    <v-overlay
+      :opacity="1"
+      :absolute= false
+      :value="overlayUserSettings"
+      z-index="5000"
+      >        
+        <userSettings
+          v-if="showUserSettings"
+        >
+        </userSettings>
+        <v-btn
+          fab
+          color="red"
+          @click="overlayUserSettings = false"
+        >
+          X
+        </v-btn>
+      </v-overlay>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      <div class="d-flex align-center">
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink mr-2"
+          contain
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          transition="scale-transition"
+          width="40"
+        />
+      </div>
+      <v-spacer></v-spacer>
+      <v-btn @click="overlayHelp = !overlayHelp" fab elevation="0">
+        <v-icon x-large>mdi mdi-help-circle</v-icon>
+      </v-btn>
+      <v-btn @click="overlayUserSettings = !overlayUserSettings" fab elevation="0">
+        <v-icon x-large>mdi mdi-account-circle</v-icon>
+      </v-btn>
+    </v-app-bar>
     <div id="map" style="margin-top: 50px;">
       <div style="position: relative; z-index: 401;">
         <v-container fluid>
@@ -113,6 +172,8 @@
 </template>
 
 <script>
+import UserSettings from "./UserSettings"
+import Help from "./Help"
 import * as L from "leaflet";
 import 'leaflet.locatecontrol';
 import axios from 'axios';
@@ -120,7 +181,15 @@ import 'leaflet-draw';
 
 export default {
   name: "Map",
+  components: {
+    UserSettings,
+    Help,
+  },
   data: () => ({
+    overlayUserSettings: false,
+    showUserSettings: true,
+    overlayHelp: false,
+    showHelp: true,
     map: null,
     startCoords: [51.505, -0.09],
     zoomLevel: 13,
@@ -151,6 +220,14 @@ export default {
     showTimePicker: false
   }),
   methods: {
+    fetchSettings () {
+      this.showUserSettings = !this.showUserSettings
+    },
+
+    fetchHelp () {
+      this.showHelp = !this.showHelp
+    },
+
     initMap() {
       //creates a map, targets the DOM element with the ID 'map'
       this.map = L.map("map", {
