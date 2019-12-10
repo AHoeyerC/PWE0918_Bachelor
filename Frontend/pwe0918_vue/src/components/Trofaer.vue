@@ -1,10 +1,7 @@
 <template>
   <v-sheet width="95vw" height="90vh" light>
 
-    <v-overlay light :value="overlaySingleTrofae" z-index="5000"> <!--:absolute= false-->  
-      <SingleTrofae v-if="showSingleTrofae"></SingleTrofae>
-      <v-btn fab color="red" @click="overlaySingleTrofae = false">x</v-btn>
-    </v-overlay>
+    
 
     <v-container fluid class="header-grey py-1">
         <v-row>
@@ -25,11 +22,19 @@
 
     <v-container>
       <v-row cols="12">
-        <v-col align="center" md="4">
-          <v-btn @click="overlaySingleTrofae = !overlaySingleTrofae" elevation="false" outlined fab>
-            <v-icon large>mdi-trophy</v-icon>
-          </v-btn>
-        </v-col>
+        <template v-for="(trophy, index) in allTrophies">
+          <v-col align="center" md="4" :key="index">
+            <span>{{ trophy.title }}</span>
+            <v-spacer></v-spacer>
+            <v-btn @click="overlaySingleTrofae = !overlaySingleTrofae; " elevation="false" outlined fab> <!--emitSingleTrophy(trophy);-->
+              <v-icon large>mdi-trophy</v-icon>
+            </v-btn>
+          </v-col>
+          <v-overlay light :value="overlaySingleTrofae" z-index="5000" :key="trophy._id"> <!--:absolute= false-->  
+            <SingleTrofae v-if="showSingleTrofae" :trofae="trophy"></SingleTrofae>
+            <v-btn fab color="red" @click="overlaySingleTrofae = false">x</v-btn>
+          </v-overlay>
+        </template>
       </v-row>
     </v-container>
 
@@ -39,6 +44,7 @@
 <script>
 import SingleTrofae from "./SingleTrofae";
 import axios from 'axios';
+// import { EventBus } from "../event-bus";
 
 export default {
   name: "Trofaer",
@@ -73,7 +79,11 @@ export default {
       }).catch((error) => {
         console.log(error);
       });
-    }
+    },
+    // emitSingleTrophy(trophy) {
+    //   EventBus.$emit('single-trophy', trophy);
+    //   console.log('sent it', trophy);
+    // },
   },
   mounted() {
     this.getAllTrophies();
