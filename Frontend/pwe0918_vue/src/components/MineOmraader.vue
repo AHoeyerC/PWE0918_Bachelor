@@ -1,13 +1,27 @@
 <template>
   <v-sheet width="95vw" height="90vh" light>
+
+    <!-- <v-overlay v-show="showTrophyAnimation">
+      <div id="bm" ref="bm"></div>
+      <v-container>
+        <v-row>
+          <v-col cols="12" align="center">
+            <v-btn fab color="red" @click="showTrophyAnimation = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-overlay> -->
+
     <v-sheet v-if="!showSingleArea">
       <v-container fluid class="header-grey py-1">
         <v-row>
           <v-col cols="12" justify="center" align="center">
             <v-sheet class="header-grey">Mine områder</v-sheet>
+            <!-- <v-btn @click="showTrophyAnimation = true;">Trigger anim</v-btn> -->
           </v-col>
         </v-row>
       </v-container>
+
       <v-tabs grow v-model="currentTab">
         <v-tab v-for="tab in tabs" :key="tab" :href="'#tab-' + tab">
           {{ tab }}
@@ -31,7 +45,9 @@
           </v-container>
         </v-tabs-items>
       </v-tabs>
+
     </v-sheet>
+
     <v-sheet v-if="showSingleArea">
 
       <v-overlay v-if="showCompleteAreaDialog">
@@ -75,12 +91,10 @@
 
       <v-overlay v-if="showCompletedAreaStepper">
         <v-card light width="400"> <!--width="300px" height="320px"-->
-
           <v-stepper v-model="stepper" :vertical="stepperVertical" class="pb-12 mb-6">
             <v-stepper-step :complete="stepper > 1" step="1">Hvor meget affald samlede du?</v-stepper-step>
             <v-stepper-content step="1" :class="stepper == 1 ? 'allow-overflow' : ''">
               <v-container class="py-0">
-
                 <v-row class="py-0" v-for="(amount, index) in amountOfTrashBags" :key="index">
                   <v-col cols="6" class="pl-0 py-0">
                     <dropdown :options="bagtypes" :placeholder="'Vælg en pose'" :selected="selectedBag" v-on:updateOption="dropdownOnSelect"></dropdown>
@@ -95,7 +109,6 @@
                     </v-text-field>
                   </v-col>
                 </v-row>
-
                 <v-btn fab height="32" width="32" @click="addTrashBag();" elevation="0" color="grey lighten-2">
                   <v-icon>mdi-plus</v-icon>
                 </v-btn>
@@ -132,6 +145,7 @@
           </v-col>
         </v-row>
       </v-container>
+
       <v-img :src="hardcodedImg" height="300px" max-height="300px" max-width="100%" class="single-area_img">
         <template v-slot:placeholder>
           <v-row class="fill-height ma-0" align="center" justify="center">
@@ -164,6 +178,7 @@
           </v-row>
         </v-container>
       </v-img>
+
       <v-container class="mt-6">
         <v-row justify="center">
           <v-col cols="10" class="pb-0">
@@ -208,6 +223,7 @@
           </v-col>
         </v-row>
       </v-container>
+
       <v-container class="mt-0">
         <v-row justify="center">
           <v-col cols="10" class="pt-0">
@@ -274,6 +290,8 @@
 import axios from 'axios';
 import { EventBus } from "../event-bus";
 import dropdown from 'vue-dropdowns';
+import bodymovin from 'lottie-web';
+const animationData = require('../../public/animations/beach-trophy-data.json');
 
 export default {
   name: "MineOmraader",
@@ -314,24 +332,13 @@ export default {
     snackbarColor: '',
     timeout: 0,
 
-    redirectToMineOmraader: false,
+    allTrophies: [],
+    singleTrophy: null,
+    showTrophyAnimation: false,
 
-    items: [
-        {
-          src: 'backgrounds/bg.jpg',
-        },
-        {
-          src: 'backgrounds/md.jpg',
-        },
-        {
-          src: 'backgrounds/bg-2.jpg',
-        },
-        {
-          src: 'backgrounds/md2.jpg',
-        },
-      ],
-      isDropdownActive: false,
-      showSocialMedia: false
+    redirectToMineOmraader: false,
+    isDropdownActive: false,
+    showSocialMedia: false
 
   }),
   components: {
@@ -511,9 +518,9 @@ export default {
       }
     },
     convertTime(time) {
-      var d = new Date(time);
-      var offset = (new Date().getTimezoneOffset() / 60) * -1;
-      var n = new Date(d.getTime() + offset);
+      var dt = new Date(time);
+      var o = (new Date().getTimezoneOffset() / 60) * -1;
+      var n = new Date(dt.getTime() + o);
       return n.toLocaleString();
     },
     startSnackbar() {
@@ -554,6 +561,32 @@ export default {
     showSocialMediaDialog() {
       this.showSocialMedia = true;
     },
+    getSingleTrophy() {
+      axios({
+        method: 'get',
+        url: this.baseUrl + 'trophies/' + '5deeb9dfab4557551893f98d', //hardcoded for now
+        withCredentials: false,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((response) => {
+        console.log(response);
+        this.singleTrophy = response.data.trophy;
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
+    renderTrophyAnimation() {
+      let animation = bodymovin.loadAnimation({
+        container: this.$refs["bm"],
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        name: 'Beach Trophy'
+      });
+      console.log(animation);
+    },
     async calculateTrashIntoGram() {
       let gram = 0;
       let num = 0;
@@ -572,9 +605,14 @@ export default {
   },
   mounted() {
     this.getUser();
+    this.getSingleTrophy();
+    // this.renderTrophyAnimation();
     EventBus.$on('back-to-mine-omraader', backToMineOmraader => {
       this.showSingleArea = backToMineOmraader;
     });
+  },
+  beforeDestroy() {
+    bodymovin.destroy('Beach Trophy');
   }
 };
 </script>

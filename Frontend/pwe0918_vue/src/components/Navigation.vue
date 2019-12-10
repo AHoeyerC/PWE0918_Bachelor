@@ -48,13 +48,13 @@
           v-if="showTrofaer"
           >
           </Trofaer>
-          <v-btn
-            fab
-            color="red"
-           @click="overlayTrofaer = false"
-          >
-            X
-          </v-btn>
+          <v-container>
+              <v-row>
+                <v-col cols="12" align="center">
+                  <v-btn fab color="red" @click="overlayTrofaer = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
         </v-overlay>
     <div id="menu">
       <v-btn class="menu-button" @click="() => (showMenu = !showMenu)" :href="!showMenu ? '#0':'#menu'" fab>
