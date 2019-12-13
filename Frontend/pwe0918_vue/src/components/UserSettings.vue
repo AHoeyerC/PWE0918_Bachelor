@@ -4,9 +4,9 @@
     >
         <v-container fluid class="header-grey py-1">
             <v-row>
-            <v-col cols="12" justify="center" align="center">
-                <v-sheet class="header-grey">Bruger Indstillinger</v-sheet>
-            </v-col>
+                <v-col cols="12" justify="center" align="center">
+                    <v-sheet class="header-grey font-weight-bold">Bruger Indstillinger</v-sheet>
+                </v-col>
             </v-row>
         </v-container>
         <v-container >
