@@ -1,55 +1,16 @@
 <template>
   <v-sheet>
-    <v-overlay
-      :opacity="1"
-      :absolute= false
-      :value="overlayHelp"
-      z-index="5000"
-      >        
-        <help
-          v-if="showHelp"
-        >
-        </help>
-        <v-btn
-          fab
-          color="red"
-          @click="overlayHelp = false"
-        >
-          X
-        </v-btn>
+    <v-overlay :opacity="1" :value="overlayHelp" z-index="5000">        
+        <help v-if="showHelp"></help>
+        <v-btn fab color="red" @click="overlayHelp = false">X</v-btn>
       </v-overlay>
-    <v-overlay
-      :opacity="1"
-      :absolute= false
-      :value="overlayUserSettings"
-      z-index="5000"
-      >        
-        <userSettings
-          v-if="showUserSettings"
-        >
-        </userSettings>
-        <v-btn
-          fab
-          color="red"
-          @click="overlayUserSettings = false"
-        >
-          X
-        </v-btn>
+    <v-overlay :opacity="1" :value="overlayUserSettings" z-index="5000">        
+        <userSettings v-if="showUserSettings"></userSettings>
+        <v-btn fab color="red" @click="overlayUserSettings = false">X</v-btn>
       </v-overlay>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
+    <v-app-bar app color="primary" dark>
       <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+        <v-img alt="Vuetify Logo" class="shrink mr-2" contain src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png" transition="scale-transition" width="40"/>
       </div>
       <v-spacer></v-spacer>
       <v-btn @click="overlayHelp = !overlayHelp" fab elevation="0">
@@ -66,21 +27,21 @@
             <v-col sm="10" md="5">
                 <v-sheet>
                   <v-stepper v-model="stepper" :vertical="stepperVertical" class="pb-0 mb-6">
-                    <v-stepper-step :complete="stepper > 1" step="1">Vælg et område</v-stepper-step>
+                    <v-stepper-step :complete="stepper > 1" step="1" color="success">Vælg et område</v-stepper-step>
                     <v-stepper-content step="1">
                       <v-btn text @click="resetArea();">Anuller</v-btn>
                       <v-btn v-if="!selectedAreaCoords.coordinates.length" color="success" class="mr-3" @click="drawArea(); showStepper = false">Start</v-btn> 
                       <v-btn v-else color="success" @click="stepper = 2">Næste</v-btn>
                     </v-stepper-content>
 
-                    <v-stepper-step :complete="stepper > 2" step="2">Navngiv dit område</v-stepper-step>
+                    <v-stepper-step :complete="stepper > 2" step="2" color="success">Navngiv dit område</v-stepper-step>
                     <v-stepper-content step="2">
                       <v-text-field label="Navn" v-model="selectedAreaName"></v-text-field>
                       <v-btn text @click="resetArea();">Anuller</v-btn>
                       <v-btn color="success" @click="stepper = 3">Næste</v-btn>
                     </v-stepper-content>
                     
-                    <v-stepper-step :complete="stepper > 3" step="3">Vælg dato og tid for gennemførelse</v-stepper-step>
+                    <v-stepper-step :complete="stepper > 3" step="3" color="success">Vælg dato og tid for gennemførelse</v-stepper-step>
                     <v-stepper-content step="3">
                       <v-dialog v-model="showDatePicker" width="290px">
                         <template v-slot:activator="{ on }" v-on="on">
@@ -159,10 +120,6 @@
         </v-container>
       </div> <!--height: 50px; width: 50px; background-color: red; position: absolute; bottom: 0; -->
     </div>
-
-    <v-btn @click="snackbar = true">End area</v-btn>
-    <v-btn @click="showStepper = !showStepper">Toggle stepper</v-btn>
-
     <v-snackbar v-model="snackbar" :color="snackbarColor">
       {{ snackbarText }}
       <v-btn color="white" text @click="snackbar = false">Luk</v-btn>
@@ -220,7 +177,7 @@ export default {
     showDatePicker: false,
     showTimePicker: false,
 
-    eventBusTestCount: 0
+    polygonColorNew: '#3FBF04'
   }),
   methods: {
     fetchSettings () {
@@ -253,17 +210,6 @@ export default {
         icon: "mdi mdi-map-marker",
         iconLoading: "mdi mdi-map-marker"
       }).addTo(this.map);
-
-      //hardcoded polygon
-      var polygon = L.polygon([
-        [51.509, -0.08],
-        [51.503, -0.06],
-        [51.51, -0.047]
-      ]).addTo(this.map);
-      // console.log(polygon);
-      //hardcoded popupbind
-      polygon.bindPopup(`This area was completed by ${this.hardcodedUser.firstName}!`);
-      // this.map.fitBounds(polygon.getBounds()); //til mine områder
 
       //Reverses the order since GeoJSON saves as LngLat, but Leaflet uses LatLng
       let mappedArray = [];
@@ -340,7 +286,9 @@ export default {
     resetArea() {
       this.stepper = 1;
       this.showStepper = false;
-      this.selectedAreaCoords = {};
+      this.selectedAreaCoords = {
+        coordinates: []
+      };
       this.selectedAreaName = '';
     },
     resetDatePicker() {
@@ -368,19 +316,19 @@ export default {
 
         response.data.areas.forEach(area => {
           let mappedData = [];
-          // console.log('foreach area', area);
           area.areaLocationData.coordinates.forEach(el => {
-            // console.log('foreach el', el);
             el.forEach(coord => {
-              // console.log('foreach coord', coord);
               mappedData.push(coord.reverse());
             });
-            // console.log('mappedData', mappedData);
           });
-          L.polygon(mappedData).addTo(this.map);
+          let poly = L.polygon(mappedData).addTo(this.map);
+          if (area.areaCompleted) {
+            poly.bindPopup(`Dette område er opryddet af ${area.user.username}!`);
+            poly.setStyle({fillColor: this.polygonColorNew, color: this.polygonColorNew});
+          } else {
+            poly.bindPopup(`Dette område er blevet registreret af ${area.user.username}!`);
+          }
         });
-
-        // console.log(this.map);
       }).catch((error) => {
         console.log(error); 
       });
