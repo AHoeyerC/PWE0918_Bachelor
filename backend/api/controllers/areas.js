@@ -5,6 +5,11 @@ const User = require('../models/user');
 exports.areas_get_all = (req, res, next) => {
     Area.find()
     .select('-__v')
+    .populate({
+        path: 'user',
+        select: '_id username firstName lastName email',
+        model: 'User'
+    })
     .exec()
     .then(areas => {
         console.log(areas);
