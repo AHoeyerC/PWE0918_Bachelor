@@ -102,10 +102,10 @@
                   </v-list>
                 </v-sheet>
                 <v-sheet v-show="currentTab === 'tab-måned'">
-                  Hej 2
+                  Implementeres i senere version
                 </v-sheet>
                 <v-sheet v-show="currentTab === 'tab-altid'">
-                  Hej 3
+                  Implementeres i senere version
                 </v-sheet>
               </v-col>
             </v-row>
@@ -114,7 +114,7 @@
       </v-tabs>
     </v-sheet>
     <v-sheet v-if="showDisplayUser">
-      Indsæt DisplayUser komponent her
+      <DisplayProfile :user="chosenUser"></DisplayProfile>
     </v-sheet>
   </v-sheet>
 </template>
@@ -122,9 +122,13 @@
 <script>
 import axios from 'axios';
 import { EventBus } from "../event-bus";
+import DisplayProfile from "./DisplayProfile";
 
   export default {
     name: "Leaderboard",
+    components: {
+      DisplayProfile
+    },
     data () {
       return {
         filters: ['Skridt', 'Affald', 'Område dækket'],

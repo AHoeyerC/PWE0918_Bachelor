@@ -5,15 +5,21 @@
       <v-container class="py-0">
         <v-row>
           <v-col class="pa-0">
-            <v-card flat>
-              <v-img src="../../public/img/trophy-previews/2-trophy-preview.svg" max-width="300"></v-img> <!--https://picsum.photos/id/11/500/300-->
+            <v-card flat max-width="300" light>
+              <v-img src="../../public/img/trophy-previews/2-trophy-preview.svg"></v-img> <!--https://picsum.photos/id/11/500/300-->
               <v-card-title class="pb-1" v-if="chosenTrophy">{{ chosenTrophy.title }}</v-card-title>
               <v-card-text v-if="chosenTrophy">{{ chosenTrophy.description }}</v-card-text>
             </v-card>
           </v-col>
         </v-row>
       </v-container>
-      <v-btn fab color="red" @click="overlaySingleTrofae = false">x</v-btn>
+      <v-container>
+        <v-row>
+          <v-col cols="12" align="center">
+            <v-btn fab color="red" @click="overlaySingleTrofae = false;" fixed style="margin-left: -28px; margin-top: -24px;">X</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-overlay>
 
     <v-container fluid class="header-grey py-1">
@@ -27,7 +33,7 @@
     <v-container>
       <v-row justify="center">
         <v-col cols="9" >
-          <div class="text-center">5/14</div>
+          <div class="text-center" v-if="user">{{ user.userData.trophies.length }}/{{ allTrophies.length }}</div>
           <v-progress-linear color="success"></v-progress-linear>
         </v-col>
       </v-row>
@@ -43,21 +49,6 @@
               <v-icon large>mdi-trophy</v-icon>
             </v-btn>
           </v-col>
-          <!-- <v-overlay light :value="overlaySingleTrofae" z-index="5000" :key="trophy._id">
-            <SingleTrofae v-if="showSingleTrofae" ></SingleTrofae>
-            <v-container class="py-0">
-              <v-row>
-                <v-col class="pa-0">
-                  <v-card flat>
-                    <v-img src="https://picsum.photos/id/11/500/300"></v-img>
-                    <v-card-title class="pb-1">{{ trophy.title }}</v-card-title>
-                    <v-card-text>{{ trophy.description }}</v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-container>
-            <v-btn fab color="red" @click="overlaySingleTrofae = false">x</v-btn>
-          </v-overlay> -->
         </template>
       </v-row>
     </v-container>
@@ -66,24 +57,18 @@
 </template>
 
 <script>
-// import SingleTrofae from "./SingleTrofae";
 import axios from 'axios';
-// import { EventBus } from "../event-bus";
 
 export default {
   name: "Trofaer",
-
-  components: {
-    // SingleTrofae
-  },
-
   data: () => ({
     overlaySingleTrofae: false,
     showSingleTrofae: true,
     
     baseUrl: 'http://localhost:8626/',
     allTrophies: [],
-    chosenTrophy: null
+    chosenTrophy: null,
+    user: null
 
   }),
   methods: {
@@ -105,12 +90,25 @@ export default {
         console.log(error);
       });
     },
-    // emitSingleTrophy(trophy) {
-    //   EventBus.$emit('single-trophy', trophy);
-    //   console.log('sent it', trophy);
-    // },
+    getUser() {
+      let userId = localStorage.getItem('userId');
+      axios({
+        method: 'get',
+        url: this.baseUrl + 'user/' + userId,
+        withCredentials: false,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((response) => {
+        console.log(response);
+        this.user = response.data.user;
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
   },
   mounted() {
+    this.getUser();
     this.getAllTrophies();
   }
 };
