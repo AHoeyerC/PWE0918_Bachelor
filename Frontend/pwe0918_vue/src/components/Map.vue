@@ -221,7 +221,7 @@ export default {
             title: "Klik for at finde din lokation"
         },
         icon: "mdi mdi-map-marker",
-        iconLoading: "mdi mdi-map-marker"
+        iconLoading: "mdi mdi-timer-sand"
       }).addTo(this.map);
 
       //Reverses the order since GeoJSON saves as LngLat, but Leaflet uses LatLng
@@ -260,7 +260,7 @@ export default {
 
       this.map.addControl(this.drawControl);
 
-      let self = this;
+      let self = this; 
       this.map.on('draw:created', function(e) {
         let layer  = e.layer;
         self.drawnItems.addLayer(layer);

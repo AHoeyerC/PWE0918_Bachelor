@@ -92,7 +92,7 @@
       <v-overlay v-if="showCompletedAreaStepper">
         <v-card light width="400"> <!--width="300px" height="320px"-->
           <v-stepper v-model="stepper" :vertical="stepperVertical" class="pb-12 mb-6">
-            <v-stepper-step :complete="stepper > 1" step="1">Hvor meget affald samlede du?</v-stepper-step>
+            <v-stepper-step :complete="stepper > 1" step="1" color="success">Hvor meget affald samlede du?</v-stepper-step>
             <v-stepper-content step="1" :class="stepper == 1 ? 'allow-overflow' : ''">
               <v-container class="py-0">
                 <v-row class="py-0" v-for="(amount, index) in amountOfTrashBags" :key="index">
@@ -115,7 +115,7 @@
               </v-container>
             </v-stepper-content>
 
-            <v-stepper-step :complete="stepper > 2" step="2">Ekstra kommentarer</v-stepper-step>
+            <v-stepper-step :complete="stepper > 2" step="2" color="success">Ekstra kommentarer</v-stepper-step>
             <v-stepper-content step="2" class="py-0">
               <v-textarea
                 class="mt-2"
