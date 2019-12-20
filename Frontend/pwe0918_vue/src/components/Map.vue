@@ -1,29 +1,39 @@
 <template>
   <v-sheet>
+
     <v-overlay :opacity="1" :value="overlayHelp" z-index="5000">        
-        <help v-if="showHelp"></help>
-        <v-btn fab color="red" @click="overlayHelp = false">X</v-btn>
-      </v-overlay>
+      <help v-if="showHelp"></help>
+      <v-btn fab color="red" @click="overlayHelp = false">X</v-btn>
+    </v-overlay>
+
     <v-overlay :opacity="1" :value="overlayUserSettings" z-index="5000">        
-        <userSettings v-if="showUserSettings"></userSettings>
-        <v-btn fab color="red" @click="overlayUserSettings = false">X</v-btn>
-      </v-overlay>
-    <v-app-bar app color="primary" dark>
+      <userSettings v-if="showUserSettings" :user="user"></userSettings>
+      <v-container>
+        <v-row>
+          <v-col cols="12" align="center">
+            <v-btn fab color="red" @click="overlayUserSettings = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-overlay>
+
+    <v-app-bar app color="success">
       <div class="d-flex align-center">
-        <v-img alt="Vuetify Logo" class="shrink mr-2" contain src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png" transition="scale-transition" width="40"/>
+        <!-- <v-img alt="Vuetify Logo" class="shrink mr-2" contain src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png" transition="scale-transition" width="40"/> -->
       </div>
       <v-spacer></v-spacer>
       <v-btn @click="overlayHelp = !overlayHelp" fab elevation="0">
         <v-icon x-large>mdi mdi-help-circle</v-icon>
       </v-btn>
-      <v-btn @click="overlayUserSettings = !overlayUserSettings" fab elevation="0">
+      <v-btn @click="getUserById(); overlayUserSettings = !overlayUserSettings; " fab elevation="0">
         <v-icon x-large>mdi mdi-account-circle</v-icon>
       </v-btn>
     </v-app-bar>
-    <div id="map" style="margin-top: 50px;">
+
+    <div id="map" style="margin-top: 64px;">
       <div style="position: relative; z-index: 401;">
         <v-container fluid>
-          <v-row justify="center" align="end" style="height: 700px;" v-if="showStepper">
+          <v-row justify="center" align="end" style="height: calc(100vh - 64px);" v-if="showStepper">
             <v-col sm="10" md="5">
                 <v-sheet>
                   <v-stepper v-model="stepper" :vertical="stepperVertical" class="pb-0 mb-6">
@@ -146,8 +156,10 @@ export default {
   data: () => ({
     overlayUserSettings: false,
     showUserSettings: true,
+
     overlayHelp: false,
     showHelp: true,
+
     map: null,
     startCoords: [51.505, -0.09],
     zoomLevel: 13,
@@ -156,6 +168,7 @@ export default {
     hardcodedArea: null,
     drawControl: null,
     drawnItems: null,
+    user: null,
 
     selectedAreaCoords: {
       coordinates: []
@@ -208,7 +221,7 @@ export default {
             title: "Klik for at finde din lokation"
         },
         icon: "mdi mdi-map-marker",
-        iconLoading: "mdi mdi-map-marker"
+        iconLoading: "mdi mdi-timer-sand"
       }).addTo(this.map);
 
       //Reverses the order since GeoJSON saves as LngLat, but Leaflet uses LatLng
@@ -236,21 +249,18 @@ export default {
           polyline: false,
           marker: false,
           circlemarker: false,
-          polygon: {
-            shapeOptions: {
-              color: '#3FBF04'
-            }
-          }
+          polygon: false,
         },
         edit: {
           featureGroup: this.drawnItems,
-          edit: false
+          edit: false,
+          remove: false
         }
       });
 
       this.map.addControl(this.drawControl);
 
-      let self = this;
+      let self = this; 
       this.map.on('draw:created', function(e) {
         let layer  = e.layer;
         self.drawnItems.addLayer(layer);
@@ -290,6 +300,10 @@ export default {
         coordinates: []
       };
       this.selectedAreaName = '';
+      this.map.removeLayer(this.drawnItems);
+      this.drawnItems = new L.FeatureGroup();
+      this.map.addLayer(this.drawnItems);
+      console.log(this.map);
     },
     resetDatePicker() {
       this.datePicker = new Date().toISOString().substr(0, 10);
@@ -393,31 +407,49 @@ export default {
         console.log(error);
       })
     },
+    getUserById() {
+      let userId = localStorage.getItem("userId");
+      axios({
+        method: 'get',
+        url: this.baseUrl + 'user/' + userId,
+        withCredentials: false,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((response) => {
+        console.log(response);
+        this.user = response.data.user;
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
 
-    async getUser() {
-      try {
-        const res = await axios({
-          method: 'get',
-          url: this.baseUrl + 'user/5dc93efa54cec115542329a7',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: false
-        });
-        this.hardcodedUser = res.data.user;
-        console.log("GET request user success: ", res.data)
-      } catch (e) {
-        console.log(e);
-      }
-    }
+    // async getUser() {
+    //   try {
+    //     const res = await axios({
+    //       method: 'get',
+    //       url: this.baseUrl + 'user/5dc93efa54cec115542329a7',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       },
+    //       withCredentials: false
+    //     });
+    //     this.hardcodedUser = res.data.user;
+    //     console.log("GET request user success: ", res.data)
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // }
   },
 
   async mounted() {
-    await this.getUser(); //await da mounted() ellers ville køre asynkront og dataen fra getUser() først ville komme ind efter den skulle bruges
+    //await da mounted() ellers ville køre asynkront og dataen fra getUser() først ville komme ind efter den skulle bruges
+    // await this.getUser(); 
+    // console.log("Hardcoded user: ", this.hardcodedUser);
+
     // await this.getArea();
     this.initMap();
     this.getMapCoordsOnClick();
-    console.log("Hardcoded user: ", this.hardcodedUser);
     this.getAllAreas();
 
     //start an area
@@ -430,7 +462,8 @@ export default {
 
 <style lang="scss" scoped>
 #map {
-  height: 700px;
+  // height: 700px;
+  height: calc(100vh - 64px);
   position: relative;
 }
 html,

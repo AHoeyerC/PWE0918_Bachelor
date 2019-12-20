@@ -1,88 +1,67 @@
 <template>
   <nav>
-        <v-overlay
-            :opacity="1"
-            :absolute= false
-            :value="overlayMineOmraader"
-            z-index="5000"
-        >        
-        <MineOmraader
-          v-if="showMineOmraader"
-        >
-        </MineOmraader>
+    <v-overlay :opacity="1" :value="overlayMineOmraader" z-index="5000">        
+      <MineOmraader v-if="showMineOmraader"></MineOmraader>
+      <v-container>
+        <v-row>
+          <v-col cols="12" align="center">
+            <v-btn fab color="red" @click="isSingleAreaShowing ? redirectToMineOmraader() : overlayMineOmraader = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-overlay>
 
-            <v-container>
-              <v-row>
-                <v-col cols="12" align="center">
-                  <v-btn fab color="red" @click="isSingleAreaShowing ? redirectToMineOmraader() : overlayMineOmraader = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
-                </v-col>
-              </v-row>
-            </v-container>
+    <v-overlay :opacity="1" :value="overlayLeaderboard" z-index="5000">        
+      <Leaderboard v-if="showLeaderboard"></Leaderboard>
+      <v-container>
+        <v-row>
+          <v-col cols="12" align="center">
+            <v-btn fab color="red" @click="isDisplayUserShowing ? redirectToLeaderboard() : overlayLeaderboard = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-overlay>
 
-          </v-overlay>
-          <v-overlay
-            :opacity="1"
-            :absolute= false
-            :value="overlayLeaderboard"
-            z-index="5000"
-        >        
-         <Leaderboard
-          v-if="showLeaderboard"
-          >
-          </Leaderboard>
-          <v-container>
-              <v-row>
-                <v-col cols="12" align="center">
-                  <v-btn fab color="red" @click="isDisplayUserShowing ? redirectToLeaderboard() : overlayLeaderboard = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
-                </v-col>
-              </v-row>
-            </v-container>
-        </v-overlay>
-        <v-overlay
-            :opacity="1"
-            :absolute= false
-            :value="overlayTrofaer"
-            z-index="5000"
-        >        
-         <Trofaer
-          v-if="showTrofaer"
-          >
-          </Trofaer>
-          <v-container>
-              <v-row>
-                <v-col cols="12" align="center">
-                  <v-btn fab color="red" @click="overlayTrofaer = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
-                </v-col>
-              </v-row>
-            </v-container>
-        </v-overlay>
-    <div id="menu">
+    <v-overlay :opacity="1" :value="overlayTrofaer" z-index="5000">        
+      <Trofaer v-if="showTrofaer"></Trofaer>
+      <v-container>
+        <v-row>
+          <v-col cols="12" align="center">
+            <v-btn fab color="red" @click="overlayTrofaer = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-overlay>
+
+    <div id="menu" style="z-index: 400;">
       <v-btn class="menu-button" @click="() => (showMenu = !showMenu)" :href="!showMenu ? '#0':'#menu'" fab>
-        <v-icon
-        :class="!showMenu ? 'mdi mdi-plus-circle' : 'mdi mdi-close-circle'">
-        </v-icon>
+        <v-icon :class="!showMenu ? 'mdi mdi-plus-circle' : 'mdi mdi-close-circle'"></v-icon>
       </v-btn>
+
         <div class="menu-item">
-        <v-btn href="#menu" @click="fetchStart();" fab elevation="0"> <!--overlayStartOmraade = !overlayStartOmraade-->
-          <v-icon>mdi mdi-calendar-plus</v-icon>
-        </v-btn>
+          <v-btn href="#menu" @click="fetchStart();" fab :elevation="showMenu ? 6 : 0">
+            <v-icon>mdi mdi-calendar-plus</v-icon>
+          </v-btn>
         </div>
+
         <div class="menu-item">
-        <v-btn href="#menu" @click="overlayMineOmraader = !overlayMineOmraader" fab elevation="0">
-          <v-icon>mdi mdi-flag</v-icon>
-        </v-btn>
-    </div>
-          <div class="menu-item">
-        <v-btn href="#menu" @click="overlayLeaderboard = !overlayLeaderboard" fab elevation="0">
-          <v-icon>mdi mdi-format-list-numbered</v-icon>
-        </v-btn>
-    </div>
+          <v-btn href="#menu" @click="overlayMineOmraader = !overlayMineOmraader" fab :elevation="showMenu ? 6 : 0">
+            <v-icon>mdi mdi-flag</v-icon>
+          </v-btn>
+        </div>
+
         <div class="menu-item">
-        <v-btn href="#menu" @click="overlayTrofaer = !overlayTrofaer" fab elevation="0">
-          <v-icon>mdi mdi-trophy</v-icon>
-        </v-btn>
+          <v-btn href="#menu" @click="overlayLeaderboard = !overlayLeaderboard" fab :elevation="showMenu ? 6 : 0">
+            <v-icon>mdi mdi-format-list-numbered</v-icon>
+          </v-btn>
+        </div>
+
+        <div class="menu-item">
+          <v-btn href="#menu" @click="overlayTrofaer = !overlayTrofaer" fab :elevation="showMenu ? 6 : 0">
+            <v-icon>mdi mdi-trophy</v-icon>
+          </v-btn>
+        </div>
     </div>
-      </div>
   </nav>
 </template>
 
