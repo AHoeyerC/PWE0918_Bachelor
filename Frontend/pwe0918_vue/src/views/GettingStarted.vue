@@ -4,7 +4,7 @@
     <v-container fluid class="success py-1">
       <v-row>
         <v-col cols="12" justify="center" align="center">
-            <v-sheet class="header-grey font-weight-bold success">Getting Started</v-sheet>
+            <v-sheet class="header-grey font-weight-bold success header-font">Getting Started</v-sheet>
         </v-col>
       </v-row>
     </v-container>

@@ -1,6 +1,6 @@
 <template>
   <v-sheet width="95vw" height="90vh" light class="hide-scroll">
-		<v-container class="py-0">
+		<v-container class="pb-0 pt-6">
 			<v-row>
 				<v-col cols="12" align="center" class="py-0">
 					<v-avatar size="164">
@@ -8,43 +8,52 @@
 					</v-avatar>
 				</v-col>
 			</v-row>
-		</v-container>
+			<v-row>
+				<v-col cols="12">
+					<v-list class="py-0" dense>
+						<v-list-item-group>
+							<v-list-item align="center" disabled color="black">
+								<v-list-item-content>
+									<v-list-item-title v-if="user" style="font-size: 24px;" class="py-2">{{ user.username }}</v-list-item-title>
+								</v-list-item-content>
+							</v-list-item>
+							<v-container v-if="user && user.userData">
+								<v-row justify="center">
+									<v-col cols="8">
+										<v-card justify="center">
+											<v-list-item disabled color="black">
+												<v-list-item-content>Antal områder: {{ user.userData.completedAreas.length }}</v-list-item-content>
+											</v-list-item>
+											<v-list-item disabled color="black">
+												<v-list-item-content>Antal m2 dækket: {{ user.userData.totalSqMeters }}</v-list-item-content>
+											</v-list-item>
+											<v-list-item disabled color="black">
+												<v-list-item-content>Mængde skrald indsamlet: {{ user.userData.totalTrashInGram }}</v-list-item-content>
+											</v-list-item>
+											<v-container class="py-0">
+												<v-row>
+													<v-col cols="12" align="end">
 
-		<v-list class="py-0" dense>
-			<v-list-item-group>
-				<v-list-item align="center">
-					<v-list-item-content>
-						<v-list-item-title v-if="user" style="font-size: 24px;" class="py-2">{{ user.username }}</v-list-item-title>
-					</v-list-item-content>
-				</v-list-item>
-				<v-container v-if="user && user.userData">
-					<v-row justify="center">
-						<v-col cols="8">
-							<v-card justify="center">
-								<v-list-item>
-									<v-list-item-content>Antal områder: {{ user.userData.completedAreas.length }}</v-list-item-content>
-								</v-list-item>
-								<v-list-item>
-									<v-list-item-content>Antal m2 dækket: {{ user.userData.totalSqMeters }}</v-list-item-content>
-								</v-list-item>
-								<v-list-item>
-									<v-list-item-content>Mængde skrald indsamlet: {{ user.userData.totalTrashInGram }}</v-list-item-content>
-								</v-list-item>
-								<v-container class="py-0">
-									<v-row>
-										<v-col cols="12" align="end">
-											<v-btn fab color="#009688" style="color: #ffffff;" height="40" width="40">
-												<v-icon size="22">mdi-chart-timeline-variant</v-icon>
-											</v-btn>
-										</v-col>
-									</v-row>
-								</v-container>
-							</v-card>
-						</v-col>
-					</v-row>
-				</v-container>
-			</v-list-item-group>
-		</v-list>
+														<v-tooltip bottom>
+															<template v-slot:activator="{ on }">
+																<v-btn fab color="#009688" style="color: #ffffff;" height="40" width="40" v-on="on">
+																	<v-icon size="22">mdi-chart-timeline-variant</v-icon>
+																</v-btn>
+															</template>
+															<span>Se graf</span>
+														</v-tooltip>
+													</v-col>
+												</v-row>
+											</v-container>
+										</v-card>
+									</v-col>
+								</v-row>
+							</v-container>
+						</v-list-item-group>
+					</v-list>
+				</v-col>
+			</v-row>
+		</v-container>
 
 		<v-container class="pa-0">
 			<v-row>

@@ -1,5 +1,5 @@
 <template>
-  <v-sheet width="95vw" height="90vh" light>
+  <v-sheet width="95vw" height="90vh" light class="hide-scroll">
 
     <!-- <v-overlay v-show="showTrophyAnimation">
       <div id="bm" ref="bm"></div>
