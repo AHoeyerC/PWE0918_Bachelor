@@ -22,39 +22,39 @@
         <v-col cols="12">
           <v-list dense>
             <v-list-item-group>
-              <v-list-item>
+              <v-list-item disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title
-                    style="text-decoration: underline; text-decoration-color: #8EC28E"
+                    style="font-weight: bold; font-size: 16px; text-decoration: underline;"
                   >Brugerdata:</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item>
+              <v-list-item disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title>Brugernavn: {{ user.username }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item>
+              <v-list-item disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title>Fornavn: {{ user.firstName }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item>
+              <v-list-item disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title>Efternavn: {{ user.lastName }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item>
+              <v-list-item disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title>E-mail: {{ user.email }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item>
+              <v-list-item disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>Bruger oprættet: {{ user.creationDate }}</v-list-item-title>
+                  <v-list-item-title>Bruger oprættet: {{ formatDate(user.creationDate) }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item v-if="user != null && user.userData">
+              <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title>Trofæer opnået: {{ user.userData.trophies.length }}</v-list-item-title>
                 </v-list-item-content>
@@ -68,34 +68,34 @@
         <v-col cols="12">
           <v-list dense>
             <v-list-item-group>
-              <v-list-item>
+              <v-list-item disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title
-                    style="text-decoration: underline; text-decoration-color: #8EC28E;"
-                  >Områdedata:</v-list-item-title>
+                    style="font-weight: bold; font-size: 16px; text-decoration: underline;"
+                  >Områdedata:</v-list-item-title> <!--text-decoration: underline; text-decoration-color: #8EC28E;-->
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item v-if="user != null && user.userData">
+              <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title>Områder gennemført: {{ user.userData.completedAreas.length }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item v-if="user != null && user.userData">
+              <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title>Åbne områder: {{ user.userData.incompleteAreas.length }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item v-if="user != null && user.userData">
+              <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title>Indsamlet affald (total, i gram): {{ user.userData ? user.userData.totalTrashInGram : 0 }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item v-if="user != null && user.userData">
+              <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title>Antal skridt (total): {{ user.userData ? user.userData.totalSteps : 0 }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item v-if="user != null && user.userData">
+              <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
                   <v-list-item-title>Område dækket (total, i m2): {{ user.userData ? user.userData.totalSqMeters : 0 }}</v-list-item-title>
                 </v-list-item-content>
@@ -148,6 +148,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 export default {
   name: "UserSettings",
   data: () => ({
@@ -159,6 +160,10 @@ export default {
   }),
   props: ["user"],
   methods: {
+    formatDate(date) {
+      let newDate = moment(date).format('DD-MM-YYYY');
+      return newDate; 
+    },
 		changeUserData() {
 			this.isEditing = true;
 		},

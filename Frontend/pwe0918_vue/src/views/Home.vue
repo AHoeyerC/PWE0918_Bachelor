@@ -1,7 +1,7 @@
 <template>
   <v-sheet>
-  <Map/>
-  <Navigation/>
+    <Map/>
+    <Navigation/>
   </v-sheet>
 </template>
 
