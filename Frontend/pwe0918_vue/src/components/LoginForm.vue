@@ -102,7 +102,7 @@ import axios from 'axios';
                     localStorage.setItem("userId", response.data.userId);
 
                     let self = this;
-                    setTimeout(() => self.$router.push('/'), 3000);
+                    setTimeout(() => self.$router.push('/gettingstarted'), 3000);
 
                 }).catch((error) => {
                     this.isLoggingIn = false;

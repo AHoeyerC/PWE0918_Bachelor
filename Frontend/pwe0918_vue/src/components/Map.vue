@@ -28,12 +28,31 @@
         <!-- <v-img alt="Vuetify Logo" class="shrink mr-2" contain src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png" transition="scale-transition" width="40"/> -->
       </div>
       <v-spacer></v-spacer>
-      <v-btn @click="overlayHelp = !overlayHelp" fab elevation="0">
-        <v-icon x-large>mdi mdi-help-circle</v-icon>
-      </v-btn>
-      <v-btn @click="getUserById(); overlayUserSettings = !overlayUserSettings; " fab elevation="0">
-        <v-icon x-large>mdi mdi-account-circle</v-icon>
-      </v-btn>
+
+      <v-tooltip bottom z-index="800">
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" @click="overlayHelp = !overlayHelp" fab elevation="0" style="background-color: transparent;">
+            <v-icon x-large color="white">mdi mdi-help-circle</v-icon>
+          </v-btn>
+        </template>
+        <span>Hjælp</span>
+      </v-tooltip>
+
+      <v-tooltip bottom z-index="800">
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" @click="getUserById(); overlayUserSettings = !overlayUserSettings; " fab elevation="0" style="background-color: transparent;">
+            <v-icon x-large color="white">mdi mdi-account-circle</v-icon>
+          </v-btn>
+        </template>
+        <span>Brugerindstillinger</span>
+      </v-tooltip>
+
+      <!-- <v-btn @click="overlayHelp = !overlayHelp" fab elevation="0" style="background-color: transparent;">
+        <v-icon x-large color="white">mdi mdi-help-circle</v-icon>
+      </v-btn> -->
+      <!-- <v-btn @click="getUserById(); overlayUserSettings = !overlayUserSettings; " fab elevation="0" style="background-color: transparent;">
+        <v-icon x-large color="white">mdi mdi-account-circle</v-icon>
+      </v-btn> -->
     </v-app-bar>
 
     <div id="map" style="margin-top: 64px;">

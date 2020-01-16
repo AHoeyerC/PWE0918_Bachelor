@@ -88,7 +88,7 @@
             </template>
         </v-checkbox>
         <v-overlay v-if="showPrivacyPolicy">
-          <v-sheet width="500px" height="800px" color="white" class="pa-5" style="overflow-y: scroll;">
+          <v-sheet width="500px" height="800px" color="white" class="pa-5 hide-scroll">
             <span style="color: #000;">
               <h1>Cookie- og privatlivspolitik</h1>
               <h4>Introduktion</h4>

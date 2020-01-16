@@ -39,9 +39,6 @@
       </v-btn>
 
         <div class="menu-item">
-          <!-- <v-btn href="#menu" @click="fetchStart();" fab :elevation="showMenu ? 6 : 0">
-            <v-icon>mdi mdi-calendar-plus</v-icon>
-          </v-btn> -->
           <v-tooltip bottom z-index="800">
             <template v-slot:activator="{ on }">
               <v-btn href="#menu" fab v-on="on" @click="fetchStart();" :elevation="showMenu ? 6 : 0">
@@ -53,9 +50,6 @@
         </div>
 
         <div class="menu-item">
-          <!-- <v-btn href="#menu" @click="overlayMineOmraader = !overlayMineOmraader" fab :elevation="showMenu ? 6 : 0">
-            <v-icon>mdi mdi-flag</v-icon>
-          </v-btn> -->
           <v-tooltip bottom z-index="800">
             <template v-slot:activator="{ on }">
               <v-btn href="#menu" fab v-on="on" @click="overlayMineOmraader = !overlayMineOmraader" :elevation="showMenu ? 6 : 0">
@@ -67,9 +61,6 @@
         </div>
 
         <div class="menu-item">
-          <!-- <v-btn href="#menu" @click="overlayLeaderboard = !overlayLeaderboard" fab :elevation="showMenu ? 6 : 0">
-            <v-icon>mdi-format-list-numbered</v-icon>
-          </v-btn> -->
           <v-tooltip bottom z-index="800">
             <template v-slot:activator="{ on }">
               <v-btn href="#menu" fab v-on="on" @click="overlayLeaderboard = !overlayLeaderboard" :elevation="showMenu ? 6 : 0">
@@ -81,9 +72,6 @@
         </div>
 
         <div class="menu-item">
-          <!-- <v-btn href="#menu" @click="overlayTrofaer = !overlayTrofaer" fab :elevation="showMenu ? 6 : 0">
-            <v-icon>mdi-trophy</v-icon>
-          </v-btn> -->
           <v-tooltip bottom z-index="800">
             <template v-slot:activator="{ on }">
               <v-btn href="#menu" fab v-on="on" @click="overlayTrofaer = !overlayTrofaer" :elevation="showMenu ? 6 : 0">

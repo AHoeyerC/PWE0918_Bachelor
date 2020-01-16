@@ -3,7 +3,7 @@
   <v-container fluid class="success py-1">
       <v-row>
         <v-col cols="12" justify="center" align="center">
-          <v-sheet color="success" class="header-grey">Login</v-sheet>
+          <v-sheet color="success" class="header-grey font-weight-bold success header-font">Login</v-sheet>
         </v-col>
       </v-row>
     </v-container>
