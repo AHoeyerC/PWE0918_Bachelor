@@ -13,16 +13,16 @@
     </v-overlay> -->
 
     <v-sheet v-if="!showSingleArea">
-      <v-container fluid class="header-grey py-1">
+      <v-container fluid class="success py-1">
         <v-row>
           <v-col cols="12" justify="center" align="center">
-            <v-sheet class="header-grey">Mine områder</v-sheet>
+            <v-sheet class="header-grey font-weight-bold success">Mine områder</v-sheet>
             <!-- <v-btn @click="showTrophyAnimation = true;">Trigger anim</v-btn> -->
           </v-col>
         </v-row>
       </v-container>
 
-      <v-tabs grow v-model="currentTab">
+      <v-tabs grow v-model="currentTab" color="success">
         <v-tab v-for="tab in tabs" :key="tab" :href="'#tab-' + tab">
           {{ tab }}
         </v-tab>

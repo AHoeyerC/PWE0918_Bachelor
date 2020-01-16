@@ -1,9 +1,9 @@
 <template>
   <v-sheet width="95vw" height="90vh" light>
-    <v-container fluid class="header-grey py-1">
+    <v-container fluid class="success py-1">
       <v-row>
         <v-col cols="12" justify="center" align="center">
-          <v-sheet class="header-grey" v-if="!showDisplayUser">
+          <v-sheet class="header-grey font-weight-bold success" v-if="!showDisplayUser">
             Leaderboard - {{ activeFilter }}
             <v-menu left offset-y>
               <template v-slot:activator="{ on }">
@@ -18,15 +18,15 @@
               </v-list>
             </v-menu>
           </v-sheet>
-          <v-sheet class="header-grey" v-else>
+          <v-sheet class="header-grey font-weight-bold success" v-else>
             Profil
           </v-sheet>
         </v-col>
       </v-row>
     </v-container>
     <v-sheet v-if="!showDisplayUser">
-      <v-tabs grow v-model="currentTab">
-        <v-tab v-for="tab in tabs" :key="tab" :href="'#tab-' + tab">
+      <v-tabs grow v-model="currentTab" color="success">
+        <v-tab v-for="tab in tabs" :key="tab" :href="'#tab-' + tab" >
           {{ tab }}
         </v-tab>
         <v-tabs-items v-model="currentTab">

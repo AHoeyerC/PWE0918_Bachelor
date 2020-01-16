@@ -1,9 +1,9 @@
 <template>
-  <v-sheet width="95vw" height="90vh" light style="overflow-y: scroll;">
-    <v-container fluid class="header-grey py-1">
+  <v-sheet width="95vw" height="90vh" light class="hide-scroll"> <!--style="overflow-y: scroll;"-->
+    <v-container fluid class="success py-1">
       <v-row>
         <v-col cols="12" justify="center" align="center">
-          <v-sheet class="header-grey font-weight-bold">Brugerindstillinger</v-sheet>
+          <v-sheet class="header-grey font-weight-bold success">Brugerindstillinger</v-sheet>
         </v-col>
       </v-row>
     </v-container>
@@ -31,32 +31,32 @@
               </v-list-item>
               <v-list-item disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>Brugernavn: {{ user.username }}</v-list-item-title>
+                  <v-list-item-title><b>Brugernavn:</b> {{ user.username }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>Fornavn: {{ user.firstName }}</v-list-item-title>
+                  <v-list-item-title><b>Fornavn:</b> {{ user.firstName }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>Efternavn: {{ user.lastName }}</v-list-item-title>
+                  <v-list-item-title><b>Efternavn:</b> {{ user.lastName }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>E-mail: {{ user.email }}</v-list-item-title>
+                  <v-list-item-title><b>E-mail:</b> {{ user.email }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>Bruger oprættet: {{ formatDate(user.creationDate) }}</v-list-item-title>
+                  <v-list-item-title><b>Bruger oprættet:</b> {{ formatDate(user.creationDate) }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>Trofæer opnået: {{ user.userData.trophies.length }}</v-list-item-title>
+                  <v-list-item-title><b>Trofæer opnået:</b> {{ user.userData.trophies.length }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -77,27 +77,27 @@
               </v-list-item>
               <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>Områder gennemført: {{ user.userData.completedAreas.length }}</v-list-item-title>
+                  <v-list-item-title><b>Områder gennemført:</b> {{ user.userData.completedAreas.length }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>Åbne områder: {{ user.userData.incompleteAreas.length }}</v-list-item-title>
+                  <v-list-item-title><b>Åbne områder:</b> {{ user.userData.incompleteAreas.length }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>Indsamlet affald (total, i gram): {{ user.userData ? user.userData.totalTrashInGram : 0 }}</v-list-item-title>
+                  <v-list-item-title><b>Indsamlet affald (total, i gram):</b> {{ user.userData ? user.userData.totalTrashInGram : 0 }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>Antal skridt (total): {{ user.userData ? user.userData.totalSteps : 0 }}</v-list-item-title>
+                  <v-list-item-title><b>Antal skridt (total):</b> {{ user.userData ? user.userData.totalSteps : 0 }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="user != null && user.userData" disabled color="black">
                 <v-list-item-content>
-                  <v-list-item-title>Område dækket (total, i m2): {{ user.userData ? user.userData.totalSqMeters : 0 }}</v-list-item-title>
+                  <v-list-item-title><b>Område dækket (total, i m2):</b> {{ user.userData ? user.userData.totalSqMeters : 0 }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -119,7 +119,7 @@
 							</template>
 
 						<v-card>
-							<v-card-title class="success" primary-title>Brugerindstillinger</v-card-title>
+							<v-card-title class="success justify-center" primary-title>Rediger brugerindstillinger</v-card-title>
 
 							<v-container>
 								<v-row>
@@ -127,7 +127,7 @@
 										<v-text-field label="Fornavn" v-model="user.firstName" style="display: block;"></v-text-field>
 										<v-text-field label="Efternavn" v-model="user.lastName"></v-text-field>
 										<v-text-field label="Email" v-model="user.email"></v-text-field>
-										<v-text-field label="Password" v-model="userNewPassword"></v-text-field>
+										<v-text-field label="Nyt password" v-model="userNewPassword"></v-text-field>
 										<v-text-field label="Genindtast password" v-model="confirmNewPassword"></v-text-field>
 									</v-col>
 								</v-row>
