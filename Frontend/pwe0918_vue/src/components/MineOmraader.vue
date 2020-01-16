@@ -30,12 +30,12 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-sheet v-show="currentTab === 'tab-aktive'">
+                <v-sheet v-show="currentTab === 'tab-aktive'" style="max-height: 600px; overflow-y: scroll;">
                   <v-card min-height="93px" class="mb-6" :img="hardcodedImg" v-for="(n, index) in userIncAreas" :key="index" @click="getSingleArea(n.area._id); ">
                     <v-card-title class="py-2 area-title">{{ n.area.title }}</v-card-title>
                   </v-card>
                 </v-sheet>
-                <v-sheet v-show="currentTab === 'tab-gennemførte'">
+                <v-sheet v-show="currentTab === 'tab-gennemførte'" style="max-height: 600px; overflow-y: scroll;">
                   <v-card min-height="93px" class="mb-6" :img="hardcodedImg" v-for="(n, index) in userCompAreas" :key="index" @click="getSingleArea(n.area._id); ">
                     <v-card-title class="py-2">{{ n.area.title }}</v-card-title>
                   </v-card>
@@ -187,7 +187,7 @@
               <v-divider></v-divider>
               <v-list dense class="pb-0">
                 <v-list-item-group>
-                  <v-list-item>
+                  <v-list-item disabled color="black">
                     <v-list-item-icon>
                       <v-icon>mdi-calendar</v-icon>
                     </v-list-item-icon>
@@ -197,7 +197,7 @@
                       </v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
-                  <v-list-item>
+                  <v-list-item disabled color="black">
                     <v-list-item-icon>
                       <v-icon>mdi-calendar-account</v-icon>
                     </v-list-item-icon>
@@ -207,7 +207,7 @@
                       </v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
-                  <v-list-item>
+                  <v-list-item disabled color="black">
                     <v-list-item-icon>
                       <v-icon>mdi-clock-outline</v-icon>
                     </v-list-item-icon>
@@ -232,7 +232,7 @@
               <v-divider></v-divider>
               <v-list dense>
                 <v-list-item-group>
-                  <v-list-item>
+                  <v-list-item disabled color="black">
                     <v-list-item-icon>
                       <v-icon>mdi-trash-can</v-icon>
                     </v-list-item-icon>
@@ -244,7 +244,7 @@
                       </v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
-                  <v-list-item>
+                  <v-list-item disabled color="black">
                     <v-list-item-icon>
                       <v-icon>mdi-shoe-print</v-icon>
                     </v-list-item-icon>
@@ -256,7 +256,7 @@
                       </v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
-                  <v-list-item>
+                  <v-list-item disabled color="black">
                     <v-list-item-icon>
                       <v-icon>mdi-map-marker-radius</v-icon>
                     </v-list-item-icon>
@@ -537,7 +537,7 @@ export default {
     },
     completeSnackbar() {
       this.snackbarTitle = 'Område gennemført!';
-      this.snackbarText = 'Tak for at gøre en forskel mod en grønnere natur! \nTryk for at se dit gennemførte område på kortet.';
+      this.snackbarText = 'Tak for at gøre en forskel mod en grønnere natur! \nGå til "Mine Områder" for at se detaljer om dit gennemførte område.';
       this.snackbarColor = '#3FBF04';
       this.snackbar = true;
     },

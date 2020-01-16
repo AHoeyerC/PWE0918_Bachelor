@@ -1,9 +1,15 @@
 <template>
   <v-sheet>
 
-    <v-overlay :opacity="1" :value="overlayHelp" z-index="5000">        
+    <v-overlay :opacity="1" :value="overlayHelp" z-index="5000">
       <help v-if="showHelp"></help>
-      <v-btn fab color="red" @click="overlayHelp = false">X</v-btn>
+      <v-container>
+        <v-row>
+          <v-col cols="12" align="center">
+            <v-btn fab color="red" @click="overlayHelp = false;" fixed bottom style="margin-left: -28px;">X</v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-overlay>
 
     <v-overlay :opacity="1" :value="overlayUserSettings" z-index="5000">        
@@ -161,7 +167,7 @@ export default {
     showHelp: true,
 
     map: null,
-    startCoords: [51.505, -0.09],
+    startCoords: [57.04257426721396, 9.916877746582031], //[51.505, -0.09]
     zoomLevel: 13,
     baseUrl: 'http://localhost:8626/',
     hardcodedUser: null,
@@ -178,7 +184,7 @@ export default {
     timePicker: null,
 
     snackbar: false,
-    snackbarText: 'Område oprettet! \n Tryk for at gå til mine område',
+    snackbarText: 'Område oprettet! \n Gå til "Mine Områder" for at se dit ny-oprettede område.',
     snackbarColor: '#3FBF04',
 
     stepper: 1,
