@@ -1,22 +1,31 @@
 #menu {
-  width: 150px;
-  height: 150px;
+  // width: 150px;
+  // height: 150px;
+  width: 56px;
+  height: 56px;
   position: absolute;
-  left: 41%;
-  top: 81%;
-  margin: 75px 0 0 75px;
+  // left: 41%;
+  // top: 81%;
+  left: 50%;
+  // bottom: 5%;
+  bottom: 0;
+  // margin: 75px 0 0 75px;
+  margin-left: 18px;
   list-style: none;
   font-size: 200%;
 }
 
 .menu-item {
-  width: 150px;
-  height: 150px;
+  // width: 150px;
+  width: 56px;
+  // height: 150px;
+  height: 56px;
   position: absolute;
   left: 50%;
   line-height: 5px;
   top: 50%;
-  margin: -75px 0 0 -75px;
+  // margin: -75px 0 0 -75px;
+  margin: -52px 0 0 -75px;
   border-radius: 50%;
   transform: translate(0px, 0px);
   transition: transform 500ms;
@@ -35,14 +44,6 @@
   }
 }
 
-// .menu-item a {
-//   color: #fff;
-//   position: relative;
-//   top: 24%;
-//   left: 0;
-//   text-decoration: none;
-// }
-
 .menu-button {
   opacity: 1;
   z-index: 2;
@@ -59,15 +60,6 @@
   text-decoration: none;
   line-height: 150px;
 }
-
-// #menu:not(:target)>div.menu-item a, #menu:target>div.menu-item a:last-of-type {
-//   opacity: 1;
-//   z-index: 1;
-// }
-
-// #menu:not(:target)>.mdi-plus-circle:before, #menu:target>.mdi-close-circle:before { 
-//   opacity: 1; 
-// }
 
 #menu:target>.menu-item:nth-child(5) {
   transform: rotate(60deg) translateY(-150px) rotate(300deg);
