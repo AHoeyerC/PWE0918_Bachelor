@@ -3,7 +3,7 @@
     <v-container fluid class="success py-1">
       <v-row>
         <v-col cols="12" justify="center" align="center">
-          <v-sheet class="header-grey font-weight-bold success" v-if="!showDisplayUser">
+          <v-sheet class="header-grey font-weight-bold success header-font" v-if="!showDisplayUser">
             Leaderboard - {{ activeFilter }}
             <v-menu left offset-y>
               <template v-slot:activator="{ on }">
@@ -18,7 +18,7 @@
               </v-list>
             </v-menu>
           </v-sheet>
-          <v-sheet class="header-grey font-weight-bold success" v-else>
+          <v-sheet class="header-grey font-weight-bold success header-font" v-else>
             Profil
           </v-sheet>
         </v-col>

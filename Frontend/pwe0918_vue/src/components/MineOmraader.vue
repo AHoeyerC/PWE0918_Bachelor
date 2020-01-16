@@ -16,7 +16,7 @@
       <v-container fluid class="success py-1">
         <v-row>
           <v-col cols="12" justify="center" align="center">
-            <v-sheet class="header-grey font-weight-bold success">Mine områder</v-sheet>
+            <v-sheet class="header-grey font-weight-bold success header-font">Mine områder</v-sheet>
             <!-- <v-btn @click="showTrophyAnimation = true;">Trigger anim</v-btn> -->
           </v-col>
         </v-row>
@@ -30,12 +30,12 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-sheet v-show="currentTab === 'tab-aktive'" style="max-height: 600px; overflow-y: scroll;">
+                <v-sheet v-show="currentTab === 'tab-aktive'" style="max-height: 600px;" class="hide-scroll">
                   <v-card min-height="93px" class="mb-6" :img="hardcodedImg" v-for="(n, index) in userIncAreas" :key="index" @click="getSingleArea(n.area._id); ">
                     <v-card-title class="py-2 area-title">{{ n.area.title }}</v-card-title>
                   </v-card>
                 </v-sheet>
-                <v-sheet v-show="currentTab === 'tab-gennemførte'" style="max-height: 600px; overflow-y: scroll;">
+                <v-sheet v-show="currentTab === 'tab-gennemførte'" style="max-height: 600px;" class="hide-scroll">
                   <v-card min-height="93px" class="mb-6" :img="hardcodedImg" v-for="(n, index) in userCompAreas" :key="index" @click="getSingleArea(n.area._id); ">
                     <v-card-title class="py-2">{{ n.area.title }}</v-card-title>
                   </v-card>
@@ -52,8 +52,17 @@
 
       <v-overlay v-if="showCompleteAreaDialog">
         <v-card width="300px" height="130px" light>
-          <v-card-title class="py-2">Afslut område?</v-card-title>
-          <v-divider></v-divider>
+          <!-- <v-card-title class="py-2">Afslut område?</v-card-title>
+          <v-divider></v-divider> -->
+
+          <v-container fluid class="success py-1">
+            <v-row>
+              <v-col cols="12" justify="center" align="center" class="py-2">
+                <v-sheet class="header-grey font-weight-bold success header-font">Afslut område?</v-sheet>
+              </v-col>
+            </v-row>
+          </v-container>
+
           <v-container>
             <v-row>
               <v-col cols="12" align="end">
@@ -138,10 +147,10 @@
         </v-card>
       </v-overlay>
 
-      <v-container fluid class="header-grey py-1">
+      <v-container fluid class="success py-1">
         <v-row>
           <v-col cols="12" justify="center" align="center">
-            <v-sheet class="header-grey">{{ chosenSingleArea.title }}</v-sheet>
+            <v-sheet class="header-grey font-weight-bold success header-font">{{ chosenSingleArea.title }}</v-sheet>
           </v-col>
         </v-row>
       </v-container>
@@ -193,7 +202,7 @@
                     </v-list-item-icon>
                     <v-list-item-content>
                       <v-list-item-title>
-                        <span>Område oprettet: {{ convertTime(chosenSingleArea.areaCreationDate) }}</span>
+                        <span><b>Område oprettet:</b> {{ convertTime(chosenSingleArea.areaCreationDate) }}</span>
                       </v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
@@ -203,7 +212,7 @@
                     </v-list-item-icon>
                     <v-list-item-content>
                       <v-list-item-title>
-                        <span>Angivet startdato: {{ chosenSingleArea.areaStartDate }}</span>
+                        <span><b>Angivet startdato:</b> {{ chosenSingleArea.areaStartDate }}</span>
                       </v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
@@ -213,7 +222,7 @@
                     </v-list-item-icon>
                     <v-list-item-content>
                       <v-list-item-title>
-                        <span>Angivet starttidspunkt: {{ chosenSingleArea.areaStartTime }}</span>
+                        <span><b>Angivet starttidspunkt:</b> {{ chosenSingleArea.areaStartTime }}</span>
                       </v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
@@ -238,7 +247,7 @@
                     </v-list-item-icon>
                     <v-list-item-content>
                       <v-list-item-title>
-                        <span>Skrald (gram): </span>
+                        <span><b>Skrald (gram):</b> </span>
                         <span v-if="chosenSingleArea.areaDetails">{{ chosenSingleArea.areaDetails.trash }}</span>
                         <span v-else>0</span>
                       </v-list-item-title>
@@ -250,7 +259,7 @@
                     </v-list-item-icon>
                     <v-list-item-content>
                       <v-list-item-title>
-                        <span>Skridt: </span>
+                        <span><b>Skridt:</b> </span>
                         <span v-if="chosenSingleArea.areaDetails">{{ chosenSingleArea.areaDetails.steps }}</span>
                         <span v-else>0</span>
                       </v-list-item-title>
@@ -262,7 +271,7 @@
                     </v-list-item-icon>
                     <v-list-item-content>
                       <v-list-item-title>
-                        <span>Område dækket (m<sup>2</sup>): </span>
+                        <span><b>Område dækket (m<sup>2</sup>):</b> </span>
                         <span v-if="chosenSingleArea.areaDetails">{{ chosenSingleArea.areaDetails.squareMeters }}</span>
                         <span v-else>0</span>
                       </v-list-item-title>
