@@ -24,28 +24,38 @@
     </v-overlay>
 
     <v-app-bar app color="success">
-      <div class="d-flex align-center">
-        <!-- <v-img alt="Vuetify Logo" class="shrink mr-2" contain src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png" transition="scale-transition" width="40"/> -->
-      </div>
-      <v-spacer></v-spacer>
+      <v-container fluid>
+        <v-row>
+          <v-col cols="8" align="start">
+            <div class="logo-font font-weight-bold"><a href="/">NatuRen</a></div>
+          </v-col>
+          <v-col cols="4" align="end">
 
-      <v-tooltip bottom z-index="800">
-        <template v-slot:activator="{ on }">
-          <v-btn v-on="on" @click="overlayHelp = !overlayHelp" fab elevation="0" style="background-color: transparent;">
-            <v-icon x-large color="white">mdi mdi-help-circle</v-icon>
-          </v-btn>
-        </template>
-        <span>Hjælp</span>
-      </v-tooltip>
+              <v-tooltip bottom z-index="800">
+                <template v-slot:activator="{ on }">
+                  <v-btn v-on="on" @click="overlayHelp = !overlayHelp" fab elevation="0" style="background-color: transparent;">
+                    <v-icon x-large color="white">mdi mdi-help-circle</v-icon>
+                  </v-btn>
+                </template>
+                <span>Hjælp</span>
+              </v-tooltip>
 
-      <v-tooltip bottom z-index="800">
-        <template v-slot:activator="{ on }">
-          <v-btn v-on="on" @click="getUserById(); overlayUserSettings = !overlayUserSettings; " fab elevation="0" style="background-color: transparent;">
-            <v-icon x-large color="white">mdi mdi-account-circle</v-icon>
-          </v-btn>
-        </template>
-        <span>Brugerindstillinger</span>
-      </v-tooltip>
+              <v-tooltip bottom z-index="800">
+                <template v-slot:activator="{ on }">
+                  <v-btn v-on="on" @click="getUserById(); overlayUserSettings = !overlayUserSettings; " fab elevation="0" style="background-color: transparent;">
+                    <v-icon x-large color="white">mdi mdi-account-circle</v-icon>
+                  </v-btn>
+                </template>
+                <span>Brugerindstillinger</span>
+              </v-tooltip>
+
+          </v-col>
+        </v-row>
+      </v-container>
+  
+      <!--<v-spacer></v-spacer>-->
+
+      
 
       <!-- <v-btn @click="overlayHelp = !overlayHelp" fab elevation="0" style="background-color: transparent;">
         <v-icon x-large color="white">mdi mdi-help-circle</v-icon>
